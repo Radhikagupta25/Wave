@@ -1,0 +1,70 @@
+#Possibe Features(superset)
+-Authentication (Authentication-api-template by Radhika Gupta)
+-User Profile(Avatar,Username,Full Name,Bio,Online Status,Last Seen,Custom Status,Theme Preference,Blocked Users,Account Settings)
+-One-to-One chats (Send Text,Edit Message,Delete for Me,Delete for Everyone,Reply to Message,Forward Message,Copy Message,Pin,Message,Search Messages,Star Message,Message Timestamp)
+-Group chats(Create Group,Group Avatar,Group Description,Rename Group,Invite Members,Remove Members,Leave Group,Delete Group,Promote Admin,Demote Admin,Group Permissions)
+-Attachments(Images,Videos,PDFs,Documents,Audio,Voice Notes,GIFs,Sticker,Preview,Download,Multiple Attachments,Drag & Drop Upload)
+-Message Reactions(Add Reaction,Remove Reaction)
+-Read receipts
+-Typing Indicator
+-Presence(Online,Offline,Last Seen,Away,Invisible)
+-Notifications(New Message,Mention,Added to Group,Reply,Group Invitation)
+-Search(Users, coversations,messages,groups)
+-Friends
+-Block & unblock
+-Voice messages
+-Calling
+-Chat Customization(Wallpapers,Nicknames,Mute Chat,Archive Chat,Delete Chat)
+-Emoji Support
+-Security
+-Nice UX Features(Unread Count,Infinite Scroll,Skeleton Loading,Optimistic UI,Auto Scroll,Lazy Image Loading,Image Compression)
+-Real time features(Socket.io,Online Users,Typing,Message Delivery,Read Receipts,Notifications)
+
+#Pages
+-Landing Page
+-Signup and email verification
+-Login
+-Forgot and reset password
+-Home(chat layout)=> sidebar of people and chat page next to it
+-User Profile
+-Edit Profile
+-Notifications
+-Search
+-Create Group
+-Group Info
+-Settings
+
+#Schema
+"Don't create a schema because there's a feature. Create a schema because there's a new entity."
+-User (already exists due to authentication)=> add:  bio,isOnline,lastSeen,socketId (temporary),blockedUsers
+-Conversation=> add: participants: [User],isGroup,groupName,groupAvatar,admins,lastMessage,lastMessageAt,createdBy
+-Message=> add:conversation,sender,type,content,attachments,replyTo,reactions,deliveredTo,seenBy,edited,deleted
+-Attachment=> add:message,url,publicId,mimeType,filename,size,uploadedBy
+-Notification=> add:receiver,sender,type,entityId,isRead,createdAt
+
+#Dependencies
+**BACKEND**
+-socket.io (real-time)
+-zod(validation)
+-helmet (security=>Secure HTTP headers)
+-express-rate-limit (security=>Prevent brute force attacks)
+-morgan(logging)
+-uuid(Useful for generating filenames, room IDs, etc)
+**FRONTEND**
+-axios(api calls)
+-zustand(state-management)
+-@tanstack/react-query (server state)
+-react-hook-form(for forms)
+-zod @hookform/resolvers(validation)
+-socket.io-client(socket)
+-lucide-react(icons)
+-sonner(Notifications)
+-date-fns(date formatting)
+-emoji-picker-react(emoji picker)
+-react-intersection-observer(Infinite scroll)
+- react-dropzone(drag and drop attachments)
+-redis
+-simple-peer or peerjs (video calls)
+
+
+
