@@ -53,14 +53,14 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(409, "User with email or username already exists")
     }
 
-    const avatarLocalPath = req.files?.avatar[0]?.path;
-    const avatar;
-    if(avatarLocalPath) avatar = await uploadOnCloudinary(avatarLocalPath);
+    const avatarLocalPath = req.files?.avatar?.[0]?.path;
 
+    let avatar;
+    if (avatarLocalPath) avatar = await uploadOnCloudinary(avatarLocalPath);
 
     const user = await User.create({
         fullname,
-        avatar: avatar.secure_url,
+        avatar: avatar?.secure_url || "",
         email,
         password,
         username: username.toLowerCase()
@@ -98,6 +98,7 @@ const registerUser = asyncHandler(async (req, res) => {
     )
 
 })
+
 
 const verifyEmail = asyncHandler(async (req, res) => {
     const { token } = req.params;
