@@ -3,10 +3,39 @@ import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import SocialLogin from "./SocialLogin";
+import { loginUser } from "../../api/authApi";
+import { toast } from "sonner";
 
 const LoginForm = () => {
 
     const [showPassword, setShowPassword] = useState(false);
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await loginUser(formData);
+            console.log(response.data);
+            toast.success(response.data.message);
+        }
+        catch (error) {
+            console.log(error.response?.data);
+            toast.error(
+                error.response?.data?.message || "Something went wrong"
+            );
+        }
+    };
 
     return (
 
@@ -25,7 +54,7 @@ const LoginForm = () => {
                 Continue your conversations with Wave.
             </p>
 
-            <form className="mt-6 space-y-4">
+            <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
                 <div>
 
                     <label className="mb-2 block text-sm text-slate-300">
@@ -38,6 +67,9 @@ const LoginForm = () => {
 
                         <input
                             type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
                             placeholder="Enter your email"
                             className="w-full bg-transparent text-white outline-none placeholder:text-slate-500"
                         />
@@ -57,6 +89,9 @@ const LoginForm = () => {
 
                         <input
                             type={showPassword ? "text" : "password"}
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
                             placeholder="Enter your password"
                             className="w-full bg-transparent text-white outline-none placeholder:text-slate-500"
                         />
@@ -99,6 +134,7 @@ const LoginForm = () => {
                 </div>
 
                 <motion.button
+                    type="submit"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: .97 }}
                     className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-cyan-400 to-blue-600 px-6 py-3 font-semibold text-white shadow-[0_10px_30px_rgba(34,211,238,.35)]"

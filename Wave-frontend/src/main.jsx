@@ -6,6 +6,7 @@ import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import ForgotAndResetPasswordPage from "./pages/ForgotAndResetPasswordPage";
+import { Toaster } from "sonner";
 
 const router = createBrowserRouter([
     {
@@ -29,5 +30,6 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <RouterProvider router={router} />
+        <Toaster richColors position="top-center" />
     </React.StrictMode>
 );

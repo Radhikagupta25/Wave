@@ -1,0 +1,37 @@
+import api from "../services/axios";
+
+export const loginUser = (data) => {
+    return api.post("/login", data);
+};
+
+export const registerUser = (data) => {
+    return api.post("/register", data);
+};
+
+export const logoutUser = () => {
+    return api.post("/logout");
+};
+
+export const refreshToken = () => {
+    return api.post("/refreshToken")
+}
+
+export const getCurrentUser = () => {
+    return api.get("/userDetails");
+};
+
+export const verifyEmail = () => {
+    return api.get("/verify-email/:token");
+};
+
+export const googleLogin = () => {
+    return api.post("/google-login");
+};
+
+export const forgotPassword = (data) => {
+    return api.post("/forgotPassword", data);
+};
+
+export const resetPassword = (data) => {
+    return api.post("/resetPassword/:token", data);
+};

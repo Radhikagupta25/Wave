@@ -6,7 +6,6 @@ import SocialLogin from "../Login Page/SocialLogin";
 
 const SignupForm = () => {
     const [showPassword, setShowPassword] = useState(false);
-
     return (
         <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -16,7 +15,7 @@ const SignupForm = () => {
         >
 
             <h1 className="text-3xl font-bold text-white">
-                Create Account 
+                Create Account
             </h1>
 
             <p className="mt-2 text-slate-400">
@@ -27,7 +26,7 @@ const SignupForm = () => {
                 <div>
 
                     <label className="mb-2 block text-sm text-slate-300">
-                        Full Name
+                        Username
                     </label>
 
                     <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 focus-within:border-cyan-400">
@@ -36,7 +35,7 @@ const SignupForm = () => {
 
                         <input
                             type="text"
-                            placeholder="Enter your full name"
+                            placeholder="Enter your Username"
                             className="w-full bg-transparent text-white outline-none placeholder:text-slate-500"
                         />
 
