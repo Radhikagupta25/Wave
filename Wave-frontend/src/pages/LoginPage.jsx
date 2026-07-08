@@ -5,7 +5,7 @@ import BubbleParticles from "../components/Landing Page/Hero section/BubbleParti
 import LoginForm from "../components/Login Page/LoginForm";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const LoginPage = () => {
   const navigate = useNavigate();
   return (
     <section className="relative flex h-screen items-center justify-center overflow-hidden bg-[#030712] px-4 py-6 sm:px-6 lg:px-8">
@@ -151,4 +151,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;
