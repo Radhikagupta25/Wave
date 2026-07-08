@@ -12,9 +12,6 @@ const Features = () => {
             <BubbleParticles />
 
             <div className="relative z-10 mx-auto max-w-375 px-6 sm:px-8 lg:px-10">
-
-                {/* Heading */}
-
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -47,9 +44,6 @@ const Features = () => {
                     </p>
 
                 </motion.div>
-
-                {/* Features */}
-
                 <div className="space-y-10">
 
                     {features.map((feature, index) => (
