@@ -26,7 +26,7 @@ const steps = [
 
 const HowItWorks = () => {
     return (
-        <section className="relative overflow-hidden bg-[#030712] py-24 sm:py-28 lg:py-32">
+        <section id="how-it-works" className="relative overflow-hidden bg-[#030712] py-24 sm:py-28 lg:py-32">
 
             <BackgroundBlobs />
             <BubbleParticles />

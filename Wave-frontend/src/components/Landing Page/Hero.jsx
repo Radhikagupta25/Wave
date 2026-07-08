@@ -8,7 +8,7 @@ import FloatingStats from "./FloatingStats";
 
 const Hero = () => {
     return (
-        <section className="relative flex min-h-screen items-center overflow-hidden bg-[#030712] pt-28">
+        <section id="hero" className="relative flex min-h-screen items-center overflow-hidden bg-[#030712] pt-28">
 
             <BackgroundBlobs />
 

@@ -6,7 +6,7 @@ import { features } from "./Features section/featuresData";
 
 const Features = () => {
     return (
-        <section className="relative overflow-hidden bg-[#04060e] py-28">
+        <section id="features" className="relative overflow-hidden bg-[#04060e] py-28">
 
             <BackgroundBlobs />
             <BubbleParticles />

@@ -5,7 +5,7 @@ import BubbleParticles from "./Hero section/BubbleParticles";
 
 const About = () => {
     return (
-        <section className="relative overflow-hidden bg-[#06131F] py-24 sm:py-28 lg:py-32">
+        <section id="about" className="relative overflow-hidden bg-[#06131F] py-24 sm:py-28 lg:py-32">
 
             <BackgroundBlobs />
             <BubbleParticles />

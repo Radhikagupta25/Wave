@@ -17,7 +17,14 @@ const navLinks = [
     },
     {
         name: "GitHub",
-        href: "https://github.com/Radhikagupta25",
+        href: "https://github.com/Radhikagupta25/Wave",
+        external: true,
+        target:"_blank"
+    },
+    {
+        name: "Contact",
+        href: "#contact",
+        external: true,
     },
 ];
 
@@ -49,6 +56,8 @@ const NavbarLandingPage = () => {
                             <a
                                 key={link.name}
                                 href={link.href}
+                                target={link.external ? "_blank" : "_self"}
+                                rel={link.external ? "noopener noreferrer" : ""}
                                 className="relative text-slate-300 hover:text-cyan-300 transition duration-300 group"
                             >
                                 {link.name}
@@ -118,6 +127,8 @@ const NavbarLandingPage = () => {
                                 <a
                                     key={link.name}
                                     href={link.href}
+                                    target={link.external ? "_blank" : "_self"}
+                                    rel={link.external ? "noopener noreferrer" : ""}
                                     onClick={() => setIsOpen(false)}
                                     className="text-lg text-slate-300 hover:text-cyan-300 transition"
                                 >

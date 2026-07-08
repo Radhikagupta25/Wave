@@ -2,8 +2,30 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { Mail, Waves, Heart } from "lucide-react";
 
 const FooterLandingPage = () => {
+
+    const footerLinks = [
+        {
+            name: "Features",
+            href: "#features",
+        },
+        {
+            name: "How it Works",
+            href: "#how-it-works",
+        },
+        {
+            name: "About",
+            href: "#about",
+        },
+        {
+            name: "GitHub",
+            href: "https://github.com/Radhikagupta25/Wave",
+            external: true,
+            target: "_blank"
+        },
+    ];
+
     return (
-        <footer className="relative overflow-hidden border-t border-white/10 bg-[#06131F]">
+        <footer id="contact" className="relative overflow-hidden border-t border-white/10 bg-[#06131F]">
             <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-cyan-500/10 blur-[120px]" />
             <div className="absolute right-0 bottom-0 h-72 w-72 rounded-full bg-blue-500/10 blur-[120px]" />
             <div className="relative mx-auto max-w-7xl px-6 py-16">
@@ -45,18 +67,17 @@ const FooterLandingPage = () => {
 
                         <div className="space-y-3">
 
-                            {[
-                                "Features",
-                                "How it Works",
-                                "About",
-                                "Login",
-                            ].map((item) => (
+                            {footerLinks.map((link) => (
                                 <a
-                                    key={item}
-                                    href="/"
+                                    key={link.name}
+                                    href={link.href}
+                                    target={link.external ? "_blank" : "_self"}
+                                    rel={link.external ? "noopener noreferrer" : ""}
                                     className="block text-slate-400 transition hover:translate-x-1 hover:text-cyan-400"
                                 >
-                                    {item}
+                                    {link.name}
+
+                                    <span className="absolute left-0 -bottom-1 h-0.5 w-0 rounded-full bg-cyan-400 transition-all duration-300 group-hover:w-full"></span>
                                 </a>
                             ))}
 
@@ -104,20 +125,23 @@ const FooterLandingPage = () => {
                             <a
                                 href="https://github.com/Radhikagupta25"
                                 className="rounded-full border border-white/10 p-3 text-slate-300 transition hover:border-cyan-400 hover:bg-cyan-500/10 hover:text-cyan-300"
+                                target="_blank"
                             >
                                 <FaGithub size={20} />
                             </a>
 
                             <a
-                                href="#"
+                                href="https://www.linkedin.com/in/radhika-gupta-596296290/"
                                 className="rounded-full border border-white/10 p-3 text-slate-300 transition hover:border-cyan-400 hover:bg-cyan-500/10 hover:text-cyan-300"
+                                target="_blank"
                             >
                                 <FaLinkedin size={20} />
                             </a>
 
                             <a
-                                href="mailto:example@gmail.com"
+                                href="mailto:radhikaaaguptaaa25@gmail.com"
                                 className="rounded-full border border-white/10 p-3 text-slate-300 transition hover:border-cyan-400 hover:bg-cyan-500/10 hover:text-cyan-300"
+                                target="_blank"
                             >
                                 <Mail size={20} />
                             </a>
