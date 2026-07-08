@@ -1,9 +1,14 @@
-import React from 'react'
+import NavbarLandingPage from "../components/Landing Page/NavbarLandingPage";
+import Hero from "../components/Landing Page/Hero";
+import FooterLandingPage from "../components/Landing Page/FooterLandingPage";
 
-function LandingPage() {
+export default function LandingPage() {
   return (
-    <div>LandingPage</div>
-  )
-}
+    <div className="relative overflow-hidden bg-[#030712] text-white">
+      <NavbarLandingPage />
+      <Hero />
+      <FooterLandingPage/>
 
-export default LandingPage
+    </div>
+  );
+}
