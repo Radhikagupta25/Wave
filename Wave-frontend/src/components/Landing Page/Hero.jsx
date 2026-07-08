@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import AnimatedText from "../Hero section/AnimatedText";
-import BackgroundBlobs from "../Hero section/BackgroundBlobs";
-import BubbleParticles from "../Hero section/BubbleParticles";
-import FloatingPhone from "../Hero section/FloatingPhone";
+import AnimatedText from "./Hero section/AnimatedText";
+import BackgroundBlobs from "./Hero section/BackgroundBlobs";
+import BubbleParticles from "./Hero section/BubbleParticles";
+import FloatingPhone from "./Hero section/FloatingPhone";
 import FloatingStats from "./FloatingStats";
 
 const Hero = () => {
@@ -15,9 +15,6 @@ const Hero = () => {
             <BubbleParticles />
 
             <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col-reverse items-center justify-between gap-16 px-6 py-16 sm:px-8 md:px-10 lg:flex-row lg:gap-10">
-
-                {/* LEFT */}
-
                 <motion.div
                     initial={{ opacity: 0, x: -70 }}
                     animate={{ opacity: 1, x: 0 }}
