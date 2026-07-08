@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Menu, X, Waves } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const navLinks = [
     {
@@ -19,17 +20,17 @@ const navLinks = [
         name: "GitHub",
         href: "https://github.com/Radhikagupta25/Wave",
         external: true,
-        target:"_blank"
+        target: "_blank"
     },
     {
         name: "Contact",
         href: "#contact",
-        external: true,
     },
 ];
 
 const NavbarLandingPage = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate();
 
     return (
         <header className="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[95%] xl:w-[85%]">
@@ -138,11 +139,11 @@ const NavbarLandingPage = () => {
 
                             <div className="mt-2 flex flex-col gap-3">
 
-                                <button className="w-full rounded-full border border-white/10 py-3 text-white">
+                                <button className="w-full rounded-full border border-white/10 py-3 text-white" onClick={() => navigate("/login")}>
                                     Login
                                 </button>
 
-                                <button className="w-full rounded-full bg-linear-to-r from-cyan-400 to-blue-600 py-3 font-semibold text-white">
+                                <button className="w-full rounded-full bg-linear-to-r from-cyan-400 to-blue-600 py-3 font-semibold text-white" onClick={() => navigate("/signup")}>
                                     Get Started
                                 </button>
 
