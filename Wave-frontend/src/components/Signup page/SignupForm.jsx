@@ -3,9 +3,45 @@ import { Eye, EyeOff, User, Mail, Lock, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import SocialLogin from "../Login Page/SocialLogin";
+import { registerUser } from "../../api/authApi";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const SignupForm = () => {
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [formData, setFormData] = useState({
+        username: "",
+        email: "",
+        password: ""
+    });
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const response = await registerUser(formData);
+            console.log(response.data);
+            toast.success(response.data.message);
+            setLoading(false);
+            setTimeout(() => {
+                navigate("/login");
+            }, 1000);
+        }
+        catch (error) {
+            console.log(error.response?.data);
+            toast.error(
+                error.response?.data?.message || "Something went wrong"
+            );
+        }
+    };
     return (
         <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -22,7 +58,7 @@ const SignupForm = () => {
                 Join Wave and start meaningful conversations.
             </p>
 
-            <form className="mt-6 space-y-4">
+            <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
                 <div>
 
                     <label className="mb-2 block text-sm text-slate-300">
@@ -35,6 +71,9 @@ const SignupForm = () => {
 
                         <input
                             type="text"
+                            name="username"
+                            value={formData.username}
+                            onChange={handleChange}
                             placeholder="Enter your Username"
                             className="w-full bg-transparent text-white outline-none placeholder:text-slate-500"
                         />
@@ -55,6 +94,9 @@ const SignupForm = () => {
 
                         <input
                             type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
                             placeholder="Enter your email"
                             className="w-full bg-transparent text-white outline-none placeholder:text-slate-500"
                         />
@@ -75,6 +117,9 @@ const SignupForm = () => {
 
                         <input
                             type={showPassword ? "text" : "password"}
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
                             placeholder="Create a password"
                             className="w-full bg-transparent text-white outline-none placeholder:text-slate-500"
                         />
@@ -92,17 +137,28 @@ const SignupForm = () => {
                 </div>
 
                 <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: .97 }}
-                    className="group mt-2 flex w-full items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-cyan-400 to-blue-600 px-6 py-3 font-semibold text-white shadow-[0_10px_30px_rgba(34,211,238,.35)]"
+                    type="submit"
+                    disabled={loading}
+                    whileHover={!loading ? { scale: 1.02 } : {}}
+                    whileTap={!loading ? { scale: 0.97 } : {}}
+                    className="group mt-2 flex w-full items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-cyan-400 to-blue-600 px-6 py-3 font-semibold text-white shadow-[0_10px_30px_rgba(34,211,238,.35)] disabled:cursor-not-allowed disabled:opacity-70"
                 >
 
-                    Create Account
+                    {loading ? (
+                        <>
+                            <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                            Creating Account...
+                        </>
+                    ) : (
+                        <>
+                            Create Account
 
-                    <ArrowRight
-                        size={18}
-                        className="transition group-hover:translate-x-1"
-                    />
+                            <ArrowRight
+                                size={18}
+                                className="transition group-hover:translate-x-1"
+                            />
+                        </>
+                    )}
 
                 </motion.button>
 

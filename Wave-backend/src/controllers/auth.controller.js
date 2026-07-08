@@ -59,7 +59,7 @@ const registerUser = asyncHandler(async (req, res) => {
     if (avatarLocalPath) avatar = await uploadOnCloudinary(avatarLocalPath);
 
     const user = await User.create({
-        fullname,
+        fullname : fullname ,
         avatar: avatar?.secure_url || "",
         email,
         password,
