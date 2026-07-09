@@ -99,10 +99,10 @@ const registerUser = asyncHandler(async (req, res) => {
         username: username.toLowerCase()
     })
 
-    const otp = Math.floor(
+    let otp = Math.floor(
         100000 + Math.random() * 900000
     ).toString();
-    const hashedOtp = crypto
+    let hashedOtp = crypto
         .createHash("sha256")
         .update(otp)
         .digest("hex");
@@ -127,8 +127,6 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(500, "Something went wrong while registering the user")
     }
 
-
-
     return res.status(201).json(
         new ApiResponse(200, createdUser, "User registered Successfully")
     )
@@ -137,7 +135,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 
 const verifyEmail = asyncHandler(async (req, res) => {
-    const { email,otp } = req.body;
+    const { email, otp } = req.body;
     const hashedOtp = crypto
         .createHash("sha256")
         .update(otp)
@@ -444,7 +442,6 @@ const googleLogin = asyncHandler(async (req, res) => {
 });
 
 const forgotPassword = asyncHandler(async (req, res) => {
-
     const { email } = req.body;
 
     if (!email) {
@@ -457,61 +454,51 @@ const forgotPassword = asyncHandler(async (req, res) => {
         throw new ApiError(404, "User not found");
     }
 
-    const resetToken = crypto
-        .randomBytes(32)
-        .toString("hex");
+    const otp = Math.floor(
+        100000 + Math.random() * 900000
+    ).toString();
 
-    const hashedToken = crypto
+    const hashedOtp = crypto
         .createHash("sha256")
-        .update(resetToken)
+        .update(otp)
         .digest("hex");
 
-    user.passwordResetToken = hashedToken;
-
+    user.passwordResetOtp = hashedOtp;
     user.passwordResetExpiry = new Date(
-        Date.now() + 30 * 60 * 1000
+        Date.now() + 10 * 60 * 1000
     );
 
-    await user.save({
-        validateBeforeSave: false
-    });
+    await user.save({ validateBeforeSave: false });
 
-    await sendResetPasswordEmail(
-        user.email,
-        resetToken
-    );
+    await sendResetPasswordEmail(user.email, otp);
 
     return res.status(200).json(
         new ApiResponse(
             200,
             {},
-            "Password reset email sent."
+            "OTP sent successfully"
         )
     );
-
 });
 
 const resetPassword = asyncHandler(async (req, res) => {
 
-    const { token } = req.params;
+    const { email, otp, newPassword, confNewPassword } = req.body;
 
-    const { password, confirmPassword } = req.body;
-
-    if (password !== confirmPassword) {
+    if (newPassword !== confNewPassword) {
         throw new ApiError(
             400,
             "Passwords do not match"
         );
     }
 
-    const hashedToken = crypto
+    let hashedOtp = crypto
         .createHash("sha256")
-        .update(token)
+        .update(otp)
         .digest("hex");
-
     const user = await User.findOne({
 
-        passwordResetToken: hashedToken,
+        passwordResetOtp: hashedOtp,
 
         passwordResetExpiry: {
             $gt: new Date()
@@ -526,7 +513,7 @@ const resetPassword = asyncHandler(async (req, res) => {
         );
     }
 
-    user.password = password;
+    user.password = newPassword;
 
     user.passwordResetToken = undefined;
 

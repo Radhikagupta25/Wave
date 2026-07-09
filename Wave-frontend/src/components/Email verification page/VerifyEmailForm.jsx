@@ -33,7 +33,7 @@ const VerifyEmailForm = () => {
             toast.success(response.data.message);
 
             setTimeout(() => {
-                navigate("/login");
+                navigate("/login",);
             }, 1500);
 
         } catch (error) {

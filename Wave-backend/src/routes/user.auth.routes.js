@@ -70,7 +70,7 @@ router.route("/forgotPassword").post(
     forgotPassword
 );
 
-router.route("/resetPassword/:token").post(
+router.route("/resetPassword").post(
     resetPassword
 );
 

@@ -33,7 +33,7 @@ export const forgotPassword = (data) => {
 };
 
 export const resetPassword = (data) => {
-    return api.post("/resetPassword/:token", data);
+    return api.post("/resetPassword", data);
 };
 
 export const resendVerificationOtp = (data) => {
