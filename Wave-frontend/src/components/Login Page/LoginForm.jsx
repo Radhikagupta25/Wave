@@ -26,11 +26,9 @@ const LoginForm = () => {
         e.preventDefault();
         try {
             const response = await loginUser(formData);
-            console.log(response.data);
             toast.success(response.data.message);
         }
         catch (error) {
-            console.log(error.response?.data);
             toast.error(
                 error.response?.data?.message || "Something went wrong"
             );

@@ -28,18 +28,21 @@ const SignupForm = () => {
         setLoading(true);
         try {
             const response = await registerUser(formData);
-            console.log(response.data);
             toast.success(response.data.message);
             setLoading(false);
             setTimeout(() => {
-                navigate("/login");
+                navigate("/verify-email", {
+                    state: {
+                        email: formData.email,
+                    }
+                });
             }, 1000);
         }
         catch (error) {
-            console.log(error.response?.data);
             toast.error(
                 error.response?.data?.message || "Something went wrong"
             );
+            setLoading(false);
         }
     };
     return (

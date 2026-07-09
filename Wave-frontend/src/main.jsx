@@ -7,6 +7,7 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import ForgotAndResetPasswordPage from "./pages/ForgotAndResetPasswordPage";
 import { Toaster } from "sonner";
+import EmailVerification from "./pages/EmailVerification";
 
 const router = createBrowserRouter([
     {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
     {
         path: "/forgot-password",
         element: < ForgotAndResetPasswordPage />,
+    },
+    {
+        path: "/verify-email",
+        element: < EmailVerification />,
     },
 ]);
 

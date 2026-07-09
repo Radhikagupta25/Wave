@@ -20,8 +20,8 @@ export const getCurrentUser = () => {
     return api.get("/userDetails");
 };
 
-export const verifyEmail = () => {
-    return api.get("/verify-email/:token");
+export const verifyEmail = (data) => {
+    return api.post("/verify-email",data);
 };
 
 export const googleLogin = () => {
@@ -34,4 +34,11 @@ export const forgotPassword = (data) => {
 
 export const resetPassword = (data) => {
     return api.post("/resetPassword/:token", data);
+};
+
+export const resendVerificationOtp = (data) => {
+    return api.post(
+        "/resend-verification-otp",
+        data
+    );
 };

@@ -44,13 +44,46 @@ const registerUser = asyncHandler(async (req, res) => {
     ) {
         throw new ApiError(400, "All fields are required")
     }
-
     const existedUser = await User.findOne({
-        $or: [{ username }, { email }]
-    })
+        $or: [{ email }, { username }]
+    });
 
     if (existedUser) {
-        throw new ApiError(409, "User with email or username already exists")
+        if (existedUser.isEmailVerified) {
+            throw new ApiError(409, "User with email or username already exists");
+        }
+        const otp = Math.floor(
+            100000 + Math.random() * 900000
+        ).toString();
+
+        const hashedOtp = crypto
+            .createHash("sha256")
+            .update(otp)
+            .digest("hex");
+
+        existedUser.emailVerificationOtp = hashedOtp;
+        existedUser.emailVerificationExpiry = new Date(
+            Date.now() + 10 * 60 * 1000
+        );
+
+        await existedUser.save({
+            validateBeforeSave: false,
+        });
+
+        await sendVerificationEmail(
+            existedUser.email,
+            otp
+        );
+
+        return res.status(200).json(
+            new ApiResponse(
+                200,
+                {
+                    email: existedUser.email,
+                },
+                "Account already exists but email is not verified. A new OTP has been sent."
+            )
+        );
     }
 
     const avatarLocalPath = req.files?.avatar?.[0]?.path;
@@ -59,28 +92,31 @@ const registerUser = asyncHandler(async (req, res) => {
     if (avatarLocalPath) avatar = await uploadOnCloudinary(avatarLocalPath);
 
     const user = await User.create({
-        fullname : fullname ,
+        fullname: fullname,
         avatar: avatar?.secure_url || "",
         email,
         password,
         username: username.toLowerCase()
     })
 
-    const verificationToken = crypto.randomBytes(32).toString("hex");
-    const hashedToken = crypto
+    const otp = Math.floor(
+        100000 + Math.random() * 900000
+    ).toString();
+    const hashedOtp = crypto
         .createHash("sha256")
-        .update(verificationToken)
+        .update(otp)
         .digest("hex");
-    user.emailVerificationToken = hashedToken;
+
+    user.emailVerificationOtp = hashedOtp;
     user.emailVerificationExpiry = new Date(
-        Date.now() + 30 * 60 * 1000
+        Date.now() + 10 * 60 * 1000
     );
     await user.save({
         validateBeforeSave: false
     });
     await sendVerificationEmail(
         user.email,
-        verificationToken
+        otp
     );
 
     const createdUser = await User.findById(user._id).select(
@@ -101,14 +137,14 @@ const registerUser = asyncHandler(async (req, res) => {
 
 
 const verifyEmail = asyncHandler(async (req, res) => {
-    const { token } = req.params;
-    const hashedToken = crypto
+    const { email,otp } = req.body;
+    const hashedOtp = crypto
         .createHash("sha256")
-        .update(token)
+        .update(otp)
         .digest("hex");
     const user = await User.findOne({
-
-        emailVerificationToken: hashedToken,
+        email,
+        emailVerificationOtp: hashedOtp,
 
         emailVerificationExpiry: {
             $gt: new Date()
@@ -117,7 +153,7 @@ const verifyEmail = asyncHandler(async (req, res) => {
     });
     if (!user) throw new ApiError(400, "User can't be verified")
     user.isEmailVerified = true;
-    user.emailVerificationToken = undefined;
+    user.emailVerificationOtp = undefined;
     user.emailVerificationExpiry = undefined;
     await user.save({
         validateBeforeSave: false
@@ -508,6 +544,57 @@ const resetPassword = asyncHandler(async (req, res) => {
 
 });
 
+const resendVerificationOtp = asyncHandler(async (req, res) => {
+
+    const { email } = req.body;
+
+    if (!email) {
+        throw new ApiError(400, "Email is required");
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
+
+    if (user.isEmailVerified) {
+        throw new ApiError(400, "Email is already verified");
+    }
+
+    const otp = Math.floor(
+        100000 + Math.random() * 900000
+    ).toString();
+
+    const hashedOtp = crypto
+        .createHash("sha256")
+        .update(otp)
+        .digest("hex");
+
+    user.emailVerificationOtp = hashedOtp;
+    user.emailVerificationExpiry = new Date(
+        Date.now() + 10 * 60 * 1000
+    );
+
+    await user.save({
+        validateBeforeSave: false
+    });
+
+    await sendVerificationEmail(
+        user.email,
+        otp
+    );
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            {},
+            "OTP sent successfully."
+        )
+    );
+
+});
+
 export {
     registerUser,
     loginUser,
@@ -521,5 +608,6 @@ export {
     deleteAccount,
     googleLogin,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    resendVerificationOtp
 }
