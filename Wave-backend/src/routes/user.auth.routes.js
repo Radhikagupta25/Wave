@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { changeUserPassword, deleteAccount, getCurrentUser, loginUser, logoutUser, refreshAccessToken, registerUser, updateUserAvatarImage, updateUserDetails, verifyEmail, googleLogin, forgotPassword, resetPassword, resendVerificationOtp } from "../controllers/auth.controller.js";
+import { changeUserPassword, deleteAccount, getCurrentUser, loginUser, logoutUser, refreshAccessToken, registerUser, updateUserAvatarImage, updateUserDetails, verifyEmail, googleLogin, forgotPassword, resetPassword, resendVerificationOtp, googleSignup } from "../controllers/auth.controller.js";
 import { upload } from "../middlewares/multer.middleware.js"
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -62,9 +62,9 @@ router.route("/deleteAccount").delete(
     deleteAccount
 )
 
-router.route("/google-login").post(
-    googleLogin
-);
+router.post("/google-signup", googleSignup);
+
+router.post("/google-login", googleLogin);
 
 router.route("/forgotPassword").post(
     forgotPassword

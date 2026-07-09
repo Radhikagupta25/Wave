@@ -5,7 +5,10 @@ import bcrypt from "bcrypt"
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
-        required: true,
+        // required: true,
+        required: function () {
+            return this.provider !== "google";
+        },
         unique: true,
         lowercase: true,
         trim: true,
@@ -29,7 +32,10 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, 'Password is required']
+        // required: [true, 'Password is required']
+        required: function () {
+            return this.provider !== "google";
+        },
     },
     refreshToken: {
         type: String,

@@ -1,13 +1,31 @@
 import { useState } from "react";
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SocialLogin from "./SocialLogin";
 import { loginUser } from "../../api/authApi";
 import { toast } from "sonner";
+import { googleLogin } from "../../api/authApi";
 
 const LoginForm = () => {
+    const navigate = useNavigate();
+    const handleGoogleSuccess = async (credentialResponse) => {
+        try {
+            const response = await googleLogin(
+                credentialResponse.credential
+            );
 
+            toast.success(response.data.message);
+
+            navigate("/");
+
+        } catch (error) {
+            toast.error(
+                error.response?.data?.message ||
+                "Google login failed"
+            );
+        }
+    };
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         email: "",
@@ -149,7 +167,10 @@ const LoginForm = () => {
 
             </form>
 
-            <SocialLogin />
+            <SocialLogin
+                onGoogleSuccess={handleGoogleSuccess}
+                text="Continue with Google"
+            />
 
             <p className="mt-5 text-center text-slate-400">
 

@@ -6,9 +6,28 @@ import SocialLogin from "../Login Page/SocialLogin";
 import { registerUser } from "../../api/authApi";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { googleSignup } from "../../api/authApi";
 
 const SignupForm = () => {
+
     const navigate = useNavigate();
+    const handleGoogleSuccess = async (credentialResponse) => {
+        try {
+            const response = await googleSignup(
+                credentialResponse.credential
+            );
+
+            toast.success(response.data.message);
+
+            navigate("/");
+
+        } catch (error) {
+            toast.error(
+                error.response?.data?.message ||
+                "Google login failed"
+            );
+        }
+    };
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
@@ -167,7 +186,10 @@ const SignupForm = () => {
 
             </form>
 
-            <SocialLogin />
+            <SocialLogin
+                onGoogleSuccess={handleGoogleSuccess}
+                text="Continue with Google"
+            />
 
             <p className="mt-5 text-center text-slate-400">
 

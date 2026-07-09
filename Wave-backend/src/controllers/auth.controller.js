@@ -372,44 +372,22 @@ const googleLogin = asyncHandler(async (req, res) => {
 
     const googleUser = await verifyGoogleToken(idToken);
 
-    let user = await User.findOne({
-        email: googleUser.email
+    const user = await User.findOne({
+        email: googleUser.email,
     });
 
     if (!user) {
-
-        user = await User.create({
-
-            fullname: googleUser.fullname,
-
-            email: googleUser.email,
-
-            avatar: googleUser.avatar,
-
-            googleId: googleUser.googleId,
-
-            provider: "google",
-
-            isEmailVerified: true,
-
-        });
-
+        throw new ApiError(
+            404,
+            "No registered account found with this Google account. Please sign up first."
+        );
     }
 
-    else {
-
-        if (!user.googleId) {
-
-            user.googleId = googleUser.googleId;
-
-            user.provider = "google";
-
-            user.isEmailVerified = true;
-
-            await user.save({ validateBeforeSave: false });
-
-        }
-
+    if (user.provider !== "google") {
+        throw new ApiError(
+            400,
+            "This account was created using email and password. Please login using your password."
+        );
     }
 
     const { accessToken, refreshToken } =
@@ -433,12 +411,74 @@ const googleLogin = asyncHandler(async (req, res) => {
                 {
                     user: loggedInUser,
                     accessToken,
-                    refreshToken
+                    refreshToken,
                 },
                 "Google login successful"
             )
         );
+});
 
+const googleSignup = asyncHandler(async (req, res) => {
+
+    const { idToken } = req.body;
+
+    if (!idToken) {
+        throw new ApiError(400, "Google ID Token is required");
+    }
+
+    const googleUser = await verifyGoogleToken(idToken);
+
+    const existingUser = await User.findOne({
+        email: googleUser.email,
+    });
+
+    if (existingUser) {
+        throw new ApiError(
+            409,
+            "An account already exists with this email. Please sign in."
+        );
+    }
+
+    const username =
+        googleUser.email.split("@")[0] +
+        Math.floor(Math.random() * 10000);
+
+    const user = await User.create({
+        fullname: googleUser.fullname,
+        username,
+        email: googleUser.email,
+        avatar: googleUser.avatar,
+        googleId: googleUser.googleId,
+        provider: "google",
+        isEmailVerified: true,
+    });
+
+    const { accessToken, refreshToken } =
+        await generateAccessAndRefreshToken(user._id);
+
+    const createdUser = await User.findById(user._id)
+        .select("-password -refreshToken");
+
+    const options = {
+        httpOnly: true,
+        secure: true,
+    };
+
+    return res
+        .status(201)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json(
+            new ApiResponse(
+                201,
+                {
+                    user: createdUser,
+                    accessToken,
+                    refreshToken,
+                },
+                "Google signup successful"
+            )
+        );
 });
 
 const forgotPassword = asyncHandler(async (req, res) => {
@@ -596,5 +636,6 @@ export {
     googleLogin,
     forgotPassword,
     resetPassword,
-    resendVerificationOtp
+    resendVerificationOtp,
+    googleSignup
 }

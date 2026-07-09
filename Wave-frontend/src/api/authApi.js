@@ -21,11 +21,19 @@ export const getCurrentUser = () => {
 };
 
 export const verifyEmail = (data) => {
-    return api.post("/verify-email",data);
+    return api.post("/verify-email", data);
 };
 
-export const googleLogin = () => {
-    return api.post("/google-login");
+export const googleLogin = (idToken) => {
+    return api.post("/google-login", {
+        idToken,
+    });
+};
+
+export const googleSignup = (idToken) => {
+    return api.post("/google-signup", {
+        idToken,
+    });
 };
 
 export const forgotPassword = (data) => {
