@@ -4,11 +4,7 @@ const messageSchema = new mongoose.Schema({
     sender: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        require: true
-    },
-    receiver: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        required: true
     },
     conversation: {
         type: mongoose.Schema.Types.ObjectId,
@@ -45,5 +41,9 @@ const messageSchema = new mongoose.Schema({
 }, {
     timestamps: true
 })
+messageSchema.index({
+    conversation: 1,
+    createdAt: -1
+});
 
 export const Message = mongoose.model("Message", messageSchema)

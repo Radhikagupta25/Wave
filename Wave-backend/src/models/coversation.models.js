@@ -31,8 +31,11 @@ const conversationSchema = new mongoose.Schema({
     lastMessageAt: {
         type: Date,
     },
-},{
+}, {
     timestamps: true
 })
+conversationSchema.index({
+    participants: 1
+});
 
 export const Conversation = mongoose.model("Conversation", conversationSchema)

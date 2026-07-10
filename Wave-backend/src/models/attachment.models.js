@@ -1,28 +1,36 @@
 import mongoose from "mongoose";
 
-const attachmentSchema= new mongoose.Schema({
+const attachmentSchema = new mongoose.Schema({
     url: {
         type: String,
-        required : true
+        required: true
     },
-    fileName :{
+    fileName: {
         type: String,
-        required : true
+        required: true
     },
-    uploadedBy : {
+    uploadedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
     },
-    size : {
-        type : Number
+    size: {
+        type: Number
     },
     mimeType: {
         type: String
     },
-    fileType: String
+    fileType: {
+        type: String,
+        enum: [
+            "image",
+            "video",
+            "audio",
+            "document"
+        ]
+    }
 }, {
     timestamps: true
 })
 
-export const Attachment= mongoose.model("Attachment", attachmentSchema)
+export const Attachment = mongoose.model("Attachment", attachmentSchema)

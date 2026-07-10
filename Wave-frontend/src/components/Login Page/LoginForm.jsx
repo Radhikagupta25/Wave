@@ -17,7 +17,7 @@ const LoginForm = () => {
 
             toast.success(response.data.message);
 
-            navigate("/");
+            navigate("/chats");
 
         } catch (error) {
             toast.error(
