@@ -48,8 +48,6 @@ const MobileMenu = ({ open, onClose }) => {
 
                 <>
 
-                    {/* Backdrop */}
-
                     <motion.div
 
                         initial={{ opacity: 0 }}
@@ -63,8 +61,6 @@ const MobileMenu = ({ open, onClose }) => {
                         className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
 
                     />
-
-                    {/* Drawer */}
 
                     <motion.div
 
@@ -89,8 +85,6 @@ const MobileMenu = ({ open, onClose }) => {
 
                     >
 
-                        {/* Header */}
-
                         <div className="flex items-center justify-between border-b border-white/10 px-6 py-5">
 
                             <h2 className="text-lg font-semibold text-white">
@@ -110,8 +104,6 @@ const MobileMenu = ({ open, onClose }) => {
                             </button>
 
                         </div>
-
-                        {/* Items */}
 
                         <div className="p-3">
 

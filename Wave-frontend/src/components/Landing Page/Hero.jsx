@@ -65,17 +65,13 @@ const Hero = () => {
 
                         <button className="w-full rounded-full border border-white/10 bg-white/5 px-8 py-4 text-lg font-medium text-white backdrop-blur-xl transition hover:border-cyan-400 hover:bg-cyan-500/10 sm:w-auto">
 
-                            GitHub
+                            <a href="https://github.com/Radhikagupta25/Wave" target="_blank">Github</a>
 
                         </button>
 
                     </motion.div>
 
-                    {/* Stats */}
-
                 </motion.div>
-
-                {/* RIGHT */}
 
                 <motion.div
                     initial={{ opacity: 0, x: 70 }}

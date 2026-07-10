@@ -76,7 +76,7 @@ export const sendResetPasswordEmail = async (email, otp) => {
             <div style="padding:50px 40px;text-align:center;">
 
                 <div style="width:72px;height:72px;margin:0 auto 24px;background:linear-gradient(135deg,#22D3EE,#2563EB);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:34px;">
-                    🔒
+                    🌊
                 </div>
 
                 <h1 style="margin:0;color:#ffffff;font-size:34px;font-weight:800;">

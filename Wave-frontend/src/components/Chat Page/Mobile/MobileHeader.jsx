@@ -1,60 +1,42 @@
-import { Search, MoreVertical, MessageCircleMore } from "lucide-react";
+import { MoreVertical, Waves } from "lucide-react";
 import { motion } from "framer-motion";
 
 const MobileHeader = ({ onMenuOpen }) => {
     return (
-        <header className="sticky top-0 z-50 flex items-center justify-between border-b border-white/10 bg-[#08131F]/90 px-5 py-4 backdrop-blur-xl lg:hidden">
-
-            {/* Logo */}
+        <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-white/10 bg-[#08131F]/90 px-5 backdrop-blur-xl">
 
             <div className="flex items-center gap-3">
 
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-linear-to-br from-cyan-400 to-blue-600 shadow-[0_0_20px_rgba(34,211,238,.35)]">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-cyan-400 to-blue-600">
 
-                    <MessageCircleMore
-                        size={22}
-                        className="text-white"
-                    />
+                    <Waves size={20} />
 
                 </div>
 
-                <h1 className="text-2xl font-bold text-white">
+                <div>
 
-                    Wave
+                    <h1 className="text-xl font-bold">
+                        Wave
+                    </h1>
 
-                </h1>
+                    <p className="text-xs text-slate-400">
+                        Where conversations flow
+                    </p>
 
-            </div>
-
-            {/* Actions */}
-
-            <div className="flex items-center gap-2">
-
-                <motion.button
-                    whileTap={{ scale: .95 }}
-                    whileHover={{ scale: 1.05 }}
-                    className="rounded-xl p-2 text-slate-300 transition hover:bg-white/5 hover:text-cyan-300"
-                >
-
-                    <Search size={22} />
-
-                </motion.button>
-
-                <motion.button
-                    whileTap={{ scale: .95 }}
-                    whileHover={{ scale: 1.05 }}
-                    onClick={onMenuOpen}
-                    className="rounded-xl p-2 text-slate-300 transition hover:bg-white/5 hover:text-cyan-300"
-                >
-
-                    <MoreVertical size={22} />
-
-                </motion.button>
+                </div>
 
             </div>
+
+            <motion.button
+                whileTap={{ scale: .95 }}
+                onClick={onMenuOpen}
+                className="rounded-xl p-2 text-slate-300 hover:bg-white/5"
+            >
+                <MoreVertical size={22} />
+            </motion.button>
 
         </header>
     );
 };
 
-export default MobileHeader;
+export default MobileHeader;    

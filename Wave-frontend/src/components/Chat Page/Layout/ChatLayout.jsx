@@ -5,19 +5,17 @@ import MessageList from "../Chat/MessageList";
 import MessageInput from "../Chat/MessageInput";
 import MobileHeader from "../Mobile/MobileHeader";
 import dummyData from "../data/dummyData";
+import MobileMenu from "../Mobile/MobileMenu";
 
 const ChatLayout = () => {
 
     const [selectedChat, setSelectedChat] = useState(null);
-
     const [mobileChatOpen, setMobileChatOpen] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     return (
 
         <div className="h-screen bg-[#08131F] text-white">
-
-            {/* ---------------- DESKTOP ---------------- */}
-
             <div className="hidden h-full lg:flex">
 
                 <div className="w-90 border-r border-white/10">
@@ -80,8 +78,6 @@ const ChatLayout = () => {
 
             </div>
 
-            {/* ---------------- MOBILE ---------------- */}
-
             <div className="flex h-full flex-col lg:hidden">
 
                 {
@@ -112,7 +108,14 @@ const ChatLayout = () => {
 
                         <>
 
-                            <MobileHeader />
+                            <MobileHeader
+                                onMenuOpen={() => setMenuOpen(true)}
+                            />
+
+                            <MobileMenu
+                                open={menuOpen}
+                                onClose={() => setMenuOpen(false)}
+                            />
 
                             <Sidebar
                                 mobile
