@@ -10,6 +10,7 @@ import { Toaster } from "sonner";
 import EmailVerification from "./pages/EmailVerification";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import ChatPage from "./pages/ChatPage";
 
 const router = createBrowserRouter([
     {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
     {
         path: "/reset-password",
         element: < ResetPasswordPage />,
+    },
+    {
+        path: "/chats",
+        element: < ChatPage />,
     },
 ]);
 
