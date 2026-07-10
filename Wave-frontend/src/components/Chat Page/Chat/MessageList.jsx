@@ -2,10 +2,16 @@ import MessageBubble from "./MessageBubble";
 
 const MessageList = ({ chat }) => {
     return (
+        <div className="relative flex-1 overflow-y-auto bg-[#08131F] px-8 py-6">
 
-        <div className="flex-1 overflow-y-auto bg-[#08131F] px-8 py-6">
+            <div
+                className="absolute inset-0 bg-cover bg-center opacity-10"
+                style={{
+                    backgroundImage: "url('/waves-bg.jpg')",
+                }}
+            />
 
-            <div className="mx-auto flex max-w-5xl flex-col gap-4">
+            <div className="relative z-10 mx-auto flex max-w-5xl flex-col gap-4">
 
                 {chat.messages.map((message) => (
                     <MessageBubble
@@ -17,7 +23,6 @@ const MessageList = ({ chat }) => {
             </div>
 
         </div>
-
     );
 };
 

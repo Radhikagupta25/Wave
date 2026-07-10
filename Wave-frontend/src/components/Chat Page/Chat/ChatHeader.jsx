@@ -20,7 +20,6 @@ const ChatHeader = ({
             className={`flex items-center justify-between border-b border-white/10 bg-[#08131F]/90 backdrop-blur-xl ${mobile ? "h-16 px-4" : "h-20 px-8"
                 }`}
         >
-            {/* LEFT */}
             <div className="flex items-center gap-3 min-w-0">
 
                 {mobile && (
@@ -35,7 +34,7 @@ const ChatHeader = ({
                 <div className="relative">
 
                     <div
-                        className={`flex items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 text-white font-semibold ${mobile ? "h-10 w-10" : "h-14 w-14"
+                        className={`flex items-center justify-center rounded-full bg-linear-to-br from-cyan-400 to-blue-600 text-white font-semibold ${mobile ? "h-10 w-10" : "h-14 w-14"
                             }`}
                     >
                         {chat.name[0]}
@@ -61,7 +60,6 @@ const ChatHeader = ({
 
             </div>
 
-            {/* RIGHT */}
             <div className="flex items-center gap-2">
 
                 <button
