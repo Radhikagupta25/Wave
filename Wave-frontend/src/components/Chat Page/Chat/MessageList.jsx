@@ -5,7 +5,7 @@ const MessageList = ({ messages }) => {
         <div className="relative flex-1 overflow-y-auto bg-[#08131F] px-8 py-6">
 
             <div
-                className="absolute inset-0 bg-cover bg-center opacity-10"
+                className="absolute inset-0 bg-cover bg-center opacity-10 z-1"
                 style={{
                     backgroundImage: "url('/waves-bg.jpg')",
                 }}

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { changeUserPassword, deleteAccount, getCurrentUser, loginUser, logoutUser, refreshAccessToken, registerUser, updateUserAvatarImage, updateUserDetails, verifyEmail, googleLogin, forgotPassword, resetPassword, resendVerificationOtp, googleSignup } from "../controllers/auth.controller.js";
+import { changeUserPassword, deleteAccount, getCurrentUser, loginUser, logoutUser, refreshAccessToken, registerUser, updateUserAvatarImage, updateUserDetails, verifyEmail, googleLogin, forgotPassword, resetPassword, resendVerificationOtp, googleSignup, searchUsers } from "../controllers/auth.controller.js";
 import { upload } from "../middlewares/multer.middleware.js"
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -77,6 +77,12 @@ router.route("/resetPassword").post(
 router.post(
     "/resend-verification-otp",
     resendVerificationOtp
+);
+
+router.get(
+    "/search-users",
+    verifyJWT,
+    searchUsers
 );
 
 export default router

@@ -622,6 +622,38 @@ const resendVerificationOtp = asyncHandler(async (req, res) => {
 
 });
 
+const searchUsers = asyncHandler(async (req, res) => {
+    const { query = "" } = req.query;
+    const users = await User.find({
+        _id: { $ne: req.user._id },
+        $or: [
+            {
+                username: {
+                    $regex: query,
+                    $options: "i",
+                },
+            },
+            {
+                fullname: {
+                    $regex: query,
+                    $options: "i",
+                },
+            },
+        ],
+    })
+        .select("_id username fullname avatar")
+        .limit(20);
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            users,
+            "Users fetched successfully"
+        )
+    );
+
+});
+
 export {
     registerUser,
     loginUser,
@@ -637,5 +669,6 @@ export {
     forgotPassword,
     resetPassword,
     resendVerificationOtp,
-    googleSignup
+    googleSignup,
+    searchUsers
 }

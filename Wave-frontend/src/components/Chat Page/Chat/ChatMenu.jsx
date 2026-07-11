@@ -32,7 +32,7 @@ const ChatMenu = ({ open, onClose }) => {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: .95, y: -10 }}
                 transition={{ duration: .15 }}
-                className="absolute right-0 top-full mt-2 z-10000 w-60 rounded-2xl border border-white/10 bg-[#0F1B2B] p-2 shadow-[0_15px_40px_rgba(0,0,0,.45)] backdrop-blur-xl"
+                className="absolute right-0 top-full mt-2 z-9999 w-60 rounded-2xl border border-white/10 bg-[#0F1B2B] p-2 shadow-[0_15px_40px_rgba(0,0,0,.45)] backdrop-blur-xl"
             >
                 {menuItems.map((item, index) => {
 

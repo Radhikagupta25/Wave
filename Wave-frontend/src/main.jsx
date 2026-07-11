@@ -11,6 +11,7 @@ import EmailVerification from "./pages/EmailVerification";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import ChatPage from "./pages/ChatPage";
+import CreateNewChatPage from "./pages/CreateNewChatPage";
 
 const router = createBrowserRouter([
     {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
     {
         path: "/chats",
         element: < ChatPage />,
+    },
+    {
+        path: "/new-chat",
+        element: < CreateNewChatPage />,
     },
 ]);
 

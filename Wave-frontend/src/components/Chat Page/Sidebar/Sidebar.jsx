@@ -1,8 +1,9 @@
-import { Waves, MoreVertical } from "lucide-react";
+import { Waves, MoreVertical, Plus } from "lucide-react";
 import SearchBar from "./SearchBar";
 import ChatList from "./ChatList";
 import { useState } from "react";
 import MobileMenu from "../Mobile/MobileMenu";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = ({
     chats,
@@ -10,6 +11,7 @@ const Sidebar = ({
     setSelectedChat,
     mobile = false,
 }) => {
+    const navigate = useNavigate()
     const [menuOpen, setMenuOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const loggedInUserId = localStorage.getItem("userId");
@@ -81,11 +83,27 @@ const Sidebar = ({
                 open={menuOpen}
                 onClose={() => setMenuOpen(false)}
             />
-            <div className="px-5 py-4">
-                <SearchBar
-                    searchTerm={searchTerm}
-                    setSearchTerm={setSearchTerm}
-                />
+            <div className="flex items-center gap-3 px-5 py-4">
+
+                <div className="flex-1">
+                    <SearchBar
+                        searchTerm={searchTerm}
+                        setSearchTerm={setSearchTerm}
+                    />
+                </div>
+
+                <button
+                    onClick={() => navigate("/new-chat")}
+                    className="flex h-14 w-14 items-center justify-center rounded-2xl
+        border border-white/10 bg-white/5
+        text-cyan-300 transition
+        hover:border-cyan-400
+        hover:bg-cyan-500/10
+        hover:shadow-[0_0_25px_rgba(34,211,238,.35)]"
+                >
+                    <Plus size={24} />
+                </button>
+
             </div>
             <div className="flex-1 overflow-y-auto px-3 pb-3">
                 <ChatList

@@ -22,20 +22,8 @@ const MobileMenu = ({ open, onClose }) => {
             label: "Edit Profile",
         },
         {
-            icon: UserPen,
-            label: "Create new chat",
-        },
-        {
             icon: Users,
             label: "Create Group",
-        },
-        {
-            icon: Settings,
-            label: "Settings",
-        },
-        {
-            icon: Moon,
-            label: "Theme",
         },
         {
             icon: LogOut,
@@ -85,7 +73,7 @@ const MobileMenu = ({ open, onClose }) => {
                             damping: 24,
                         }}
 
-                        className="fixed right-0 top-0 z-50 h-screen w-72 border-l border-white/10 bg-[#0B1523] shadow-2xl"
+                        className="fixed right-0 top-0 z-1000000 h-screen w-72 border-l border-white/10 bg-[#0B1523] shadow-2xl"
 
                     >
 

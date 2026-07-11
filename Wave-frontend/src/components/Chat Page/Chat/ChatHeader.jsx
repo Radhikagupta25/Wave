@@ -22,7 +22,7 @@ const ChatHeader = ({
     );
     return (
         <div
-            className={`flex items-center justify-between border-b border-white/10 bg-[#08131F]/90 backdrop-blur-xl ${mobile ? "h-16 px-4" : "h-20 px-8"
+            className={`relative z-50 flex items-center justify-between border-b border-white/10 bg-[#08131F]/90 backdrop-blur-xl ${mobile ? "h-16 px-4" : "h-20 px-8"
                 }`}
         >
             <div className="flex items-center gap-3 min-w-0">

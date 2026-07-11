@@ -50,3 +50,7 @@ export const resendVerificationOtp = (data) => {
         data
     );
 };
+
+export const searchUsers = (query) => {
+    return api.get(`/search-users?query=${query}`);
+};

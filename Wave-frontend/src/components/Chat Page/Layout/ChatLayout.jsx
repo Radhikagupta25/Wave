@@ -7,6 +7,7 @@ import MobileHeader from "../Mobile/MobileHeader";
 import MobileMenu from "../Mobile/MobileMenu";
 import { getMessages } from "../../../api/messageApi";
 import { getConversations } from "../../../api/conversationApi";
+import { useLocation } from "react-router-dom";
 
 const ChatLayout = () => {
 
@@ -15,6 +16,7 @@ const ChatLayout = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [conversations, setConversations] = useState([]);
     const [messages, setMessages] = useState([]);
+    const location = useLocation();
     const fetchConversations = async () => {
         try {
             const data = await getConversations();
@@ -39,6 +41,13 @@ const ChatLayout = () => {
     useEffect(() => {
         fetchConversations();
     }, []);
+    useEffect(() => {
+
+        if (!location.state?.conversation) return;
+
+        setSelectedChat(location.state.conversation);
+
+    }, [location.state]);
     useEffect(() => {
         if (selectedChat) {
             fetchMessages();
