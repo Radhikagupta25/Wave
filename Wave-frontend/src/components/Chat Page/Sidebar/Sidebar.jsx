@@ -11,6 +11,24 @@ const Sidebar = ({
     mobile = false,
 }) => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const loggedInUserId = localStorage.getItem("userId");
+    const filteredChats = chats.filter((chat) => {
+        const otherUser = chat.participants?.find(
+            (user) => user._id !== loggedInUserId
+        );
+        const search = searchTerm.toLowerCase();
+        return (
+            otherUser?.username
+                ?.toLowerCase()
+                .includes(search) ||
+
+            otherUser?.fullname
+                ?.toLowerCase()
+                .includes(search)
+        );
+
+    });
     return (
         <aside className="flex h-full flex-col bg-[#0B1523]">
             {!mobile && (
@@ -64,11 +82,14 @@ const Sidebar = ({
                 onClose={() => setMenuOpen(false)}
             />
             <div className="px-5 py-4">
-                <SearchBar />
+                <SearchBar
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                />
             </div>
             <div className="flex-1 overflow-y-auto px-3 pb-3">
                 <ChatList
-                    chats={chats}
+                    chats={filteredChats}
                     selectedChat={selectedChat}
                     setSelectedChat={setSelectedChat}
                 />

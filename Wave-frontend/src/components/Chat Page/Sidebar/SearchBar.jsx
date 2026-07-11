@@ -1,6 +1,9 @@
 import { Search } from "lucide-react";
 
-const SearchBar = () => {
+const SearchBar = ({
+    searchTerm,
+    setSearchTerm,
+}) => {
     return (
         <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-xl transition focus-within:border-cyan-400">
 
@@ -11,6 +14,10 @@ const SearchBar = () => {
 
             <input
                 type="text"
+                value={searchTerm}
+                onChange={(e) =>
+                    setSearchTerm(e.target.value)
+                }
                 placeholder="Search chats..."
                 className="w-full bg-transparent text-white outline-none placeholder:text-slate-500"
             />

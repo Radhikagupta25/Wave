@@ -22,6 +22,10 @@ const MobileMenu = ({ open, onClose }) => {
             label: "Edit Profile",
         },
         {
+            icon: UserPen,
+            label: "Create new chat",
+        },
+        {
             icon: Users,
             label: "Create Group",
         },
