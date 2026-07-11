@@ -5,3 +5,6 @@ export const getMessages = async (conversationId) => {
     return res.data.data;
 };
 
+export const sendMessage = (data) => {
+    return api.post("/messages", data);
+};

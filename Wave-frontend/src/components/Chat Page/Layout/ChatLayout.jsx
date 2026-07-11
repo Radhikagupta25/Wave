@@ -4,7 +4,6 @@ import ChatHeader from "../Chat/ChatHeader";
 import MessageList from "../Chat/MessageList";
 import MessageInput from "../Chat/MessageInput";
 import MobileHeader from "../Mobile/MobileHeader";
-import dummyData from "../data/dummyData";
 import MobileMenu from "../Mobile/MobileMenu";
 import { getMessages } from "../../../api/messageApi";
 import { getConversations } from "../../../api/conversationApi";
@@ -79,6 +78,8 @@ const ChatLayout = () => {
 
                                 <MessageInput
                                     chat={selectedChat}
+                                    fetchMessages={fetchMessages}
+                                    fetchConversations={fetchConversations}
                                 />
 
                             </>
@@ -133,6 +134,8 @@ const ChatLayout = () => {
 
                             <MessageInput
                                 chat={selectedChat}
+                                fetchMessages={fetchMessages}
+                                fetchConversations={fetchConversations}
                             />
 
                         </>

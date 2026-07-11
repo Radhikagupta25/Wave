@@ -6,11 +6,29 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { sendMessage } from "../../../api/messageApi";
 
-const MessageInput = ({ chat }) => {
+const MessageInput = ({ chat, fetchMessages , fetchConversations}) => {
 
     const [message, setMessage] = useState("");
+    const handleSend = async () => {
 
+        if (!message.trim()) return;
+
+        try {
+            await sendMessage({
+                conversationId: chat._id,
+                content: message,
+            });
+
+            setMessage("");
+            fetchMessages();
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    };
     return (
         <div className="border-t border-white/10 bg-[#08131F]/95 px-3 py-3">
 
@@ -30,6 +48,7 @@ const MessageInput = ({ chat }) => {
                 />
 
                 <button
+                    onClick={handleSend}
                     className="rounded-xl bg-linear-to-r from-cyan-400 to-blue-600 p-2 text-white shadow-lg shadow-cyan-500/30"
                 >
 
