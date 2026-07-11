@@ -42,7 +42,15 @@ const ChatHeader = ({
                         className={`flex items-center justify-center rounded-full bg-linear-to-br from-cyan-400 to-blue-600 text-white font-semibold ${mobile ? "h-10 w-10" : "h-14 w-14"
                             }`}
                     >
-                        {otherUser?.username?.charAt(0).toUpperCase() || "?"}
+                        {otherUser?.avatar ? (
+                            <img
+                                src={otherUser.avatar}
+                                alt={otherUser.username}
+                                className="h-full w-full object-cover"
+                            />
+                        ) : (
+                            otherUser?.username?.charAt(0).toUpperCase() || "?"
+                        )}
                     </div>
 
                     {chat.online && (

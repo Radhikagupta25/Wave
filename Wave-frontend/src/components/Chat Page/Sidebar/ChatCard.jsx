@@ -1,4 +1,11 @@
 import { motion } from "framer-motion";
+import {
+    Image,
+    Video,
+    FileText,
+    Music,
+    Paperclip,
+} from "lucide-react";
 
 const ChatCard = ({
     chat,
@@ -10,7 +17,52 @@ const ChatCard = ({
     const otherUser = chat.participants?.find(
         (user) => user._id !== loggedInUserId
     );
+    const getAttachmentPreview = (attachment) => {
 
+        switch (attachment.fileType) {
+
+            case "image":
+                return (
+                    <span className="flex items-center gap-2">
+                        <Image size={15} className="text-cyan-400" />
+                        Photo
+                    </span>
+                );
+
+            case "video":
+                return (
+                    <span className="flex items-center gap-2">
+                        <Video size={15} className="text-cyan-400" />
+                        Video
+                    </span>
+                );
+
+            case "audio":
+                return (
+                    <span className="flex items-center gap-2">
+                        <Music size={15} className="text-cyan-400" />
+                        Audio
+                    </span>
+                );
+
+            case "document":
+                return (
+                    <span className="flex items-center gap-2">
+                        <FileText size={15} className="text-cyan-400" />
+                        {attachment.fileName}
+                    </span>
+                );
+
+            default:
+                return (
+                    <span className="flex items-center gap-2">
+                        <Paperclip size={15} className="text-cyan-400" />
+                        Attachment
+                    </span>
+                );
+        }
+
+    };
     return (
         <motion.div
             onClick={onClick}
@@ -24,7 +76,15 @@ const ChatCard = ({
         >
             <div className="relative">
                 <div className="flex h-14 w-14 items-center justify-center rounded-full bg-linear-to-br from-cyan-400 to-blue-600 text-lg font-bold text-white">
-                    {otherUser?.username?.charAt(0).toUpperCase() || "?"}
+                    {otherUser?.avatar ? (
+                        <img
+                            src={otherUser.avatar}
+                            alt={otherUser.username}
+                            className="h-full w-full object-cover"
+                        />
+                    ) : (
+                        otherUser?.username?.charAt(0).toUpperCase() || "?"
+                    )}
                 </div>
 
                 {otherUser?.online && (
@@ -52,10 +112,23 @@ const ChatCard = ({
 
                 <div className="mt-1">
 
-                    <p className="truncate text-sm text-slate-400">
-                        {chat.lastMessage?.content || "Start chatting..."}
-                    </p>
+                    <div className="truncate text-sm text-slate-400">
 
+                        {chat.lastMessage?.content ? (
+
+                            chat.lastMessage.content
+
+                        ) : chat.lastMessage?.attachments?.length > 0 ? (
+
+                            getAttachmentPreview(chat.lastMessage.attachments[0])
+
+                        ) : (
+
+                            "Start chatting..."
+
+                        )}
+
+                    </div>
                 </div>
 
             </div>

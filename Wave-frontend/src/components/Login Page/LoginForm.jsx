@@ -6,6 +6,7 @@ import SocialLogin from "./SocialLogin";
 import { loginUser } from "../../api/authApi";
 import { toast } from "sonner";
 import { googleLogin } from "../../api/authApi";
+import { socket } from "../../services/socket";
 
 const LoginForm = () => {
     const navigate = useNavigate();
@@ -17,6 +18,16 @@ const LoginForm = () => {
             );
 
             toast.success(response.data.message);
+            socket.connect();
+
+            socket.once("connect", () => {
+                console.log("Frontend Connected:", socket.id);
+
+                socket.emit(
+                    "setup",
+                    response.data.data.user._id
+                );
+            });
             navigate("/chats");
 
         } catch (error) {
@@ -64,6 +75,16 @@ const LoginForm = () => {
                 response.data.data.accessToken
             );
             toast.success(response.data.message);
+            socket.connect();
+
+            socket.once("connect", () => {
+                console.log("Frontend Connected:", socket.id);
+
+                socket.emit(
+                    "setup",
+                    response.data.data.user._id
+                );
+            });
             navigate("/chats");
 
         } catch (error) {
