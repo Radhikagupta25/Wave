@@ -3,23 +3,34 @@ let io;
 const onlineUsers = new Map();
 
 export const initializeSocket = (socketServer) => {
-
     io = socketServer;
+
     io.on("connection", (socket) => {
-        console.log("User Connected:", socket.id);
+
         socket.on("setup", (userId) => {
             onlineUsers.set(userId, socket.id);
-            console.log(
-                "User Online:",
-                userId
-            );
         });
+
+        socket.on("join-conversation", (conversationId) => {
+            socket.join(conversationId);
+        });
+
+        socket.on("leave-conversation", (conversationId) => {
+            socket.leave(conversationId);
+        });
+
         socket.on("disconnect", () => {
-            console.log("User Disconnected:", socket.id);
+            for (const [userId, socketId] of onlineUsers.entries()) {
+                if (socketId === socket.id) {
+                    onlineUsers.delete(userId);
+                    break;
+                }
+            }
         });
 
     });
-
 };
 
-export { io, onlineUsers };
+export const getIO = () => io;
+
+export { onlineUsers };

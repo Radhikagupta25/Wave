@@ -9,16 +9,15 @@ import { useState, useRef } from "react";
 import { sendMessage } from "../../../api/messageApi";
 import { uploadAttachment } from "../../../api/attachmentApi";
 
-const MessageInput = ({ chat, fetchMessages, fetchConversations }) => {
+const MessageInput = ({ chat, setMessages, fetchConversations }) => {
 
     const [message, setMessage] = useState("");
+    const [sending, setSending] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const fileInputRef = useRef(null);
     const handleSend = async () => {
-        if (!message.trim() && !selectedFile) {
-            return;
-        }
-
+        if (!message.trim() && !selectedFile) return;
+        setSending(true);
         try {
             let attachments = [];
             if (selectedFile) {
@@ -26,22 +25,36 @@ const MessageInput = ({ chat, fetchMessages, fetchConversations }) => {
                 attachments.push(uploaded.data.data._id);
 
             }
-            await sendMessage({
+
+            const res = await sendMessage({
                 conversationId: chat._id,
                 content: message,
-                attachments
+                attachments,
             });
+
+            setMessages(prev => [
+                ...prev,
+                res.data.data,
+            ]);
+
             setMessage("");
             setSelectedFile(null);
             fileInputRef.current.value = "";
-            fetchMessages()
-            fetchConversations()
+            await fetchConversations();
 
-        } catch (error) {
+        }
+        catch (error) {
+
             console.log(error);
+
+        }
+        finally {
+
+            setSending(false);
+
         }
 
-    };
+    }
     return (
         <div className="border-t border-white/10 bg-[#08131F]/95 px-3 py-3">
             {selectedFile && (
@@ -96,11 +109,20 @@ const MessageInput = ({ chat, fetchMessages, fetchConversations }) => {
                 />
 
                 <button
+                    disabled={sending}
                     onClick={handleSend}
                     className="rounded-xl bg-linear-to-r from-cyan-400 to-blue-600 p-2 text-white shadow-lg shadow-cyan-500/30"
                 >
 
-                    <SendHorizontal size={20} />
+                    {sending ? (
+
+                        <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+
+                    ) : (
+
+                        <SendHorizontal size={20} />
+
+                    )}
 
                 </button>
 

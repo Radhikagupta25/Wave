@@ -8,6 +8,7 @@ import MobileMenu from "../Mobile/MobileMenu";
 import { getMessages } from "../../../api/messageApi";
 import { getConversations } from "../../../api/conversationApi";
 import { useLocation } from "react-router-dom";
+import { socket } from "../../../services/socket";
 
 const ChatLayout = () => {
 
@@ -53,7 +54,48 @@ const ChatLayout = () => {
             fetchMessages();
         }
     }, [selectedChat]);
+    useEffect(() => {
+        if (!selectedChat) return;
+        socket.emit(
+            "join-conversation",
+            selectedChat._id
+        );
+        return () => {
+            socket.emit(
+                "leave-conversation",
+                selectedChat._id
+            );
 
+        };
+
+    }, [selectedChat]);
+    useEffect(() => {
+
+        if (!selectedChat) return;
+
+        const handleNewMessage = ({ conversationId, message }) => {
+
+            if (conversationId !== selectedChat._id) return;
+
+            setMessages(prev => {
+
+                if (prev.some(m => m._id === message._id)) {
+                    return prev;
+                }
+
+                return [...prev, message];
+
+            });
+
+        };
+
+        socket.on("new-message", handleNewMessage);
+
+        return () => {
+            socket.off("new-message", handleNewMessage);
+        };
+
+    }, [selectedChat]);
     return (
 
         <div className="h-screen bg-[#08131F] text-white">
@@ -87,8 +129,8 @@ const ChatLayout = () => {
 
                                 <MessageInput
                                     chat={selectedChat}
-                                    fetchMessages={fetchMessages}
                                     fetchConversations={fetchConversations}
+                                    setMessages={setMessages}
                                 />
 
                             </>
@@ -143,8 +185,8 @@ const ChatLayout = () => {
 
                             <MessageInput
                                 chat={selectedChat}
-                                fetchMessages={fetchMessages}
                                 fetchConversations={fetchConversations}
+                                setMessages={setMessages}
                             />
 
                         </>

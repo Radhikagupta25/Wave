@@ -4,6 +4,7 @@ import { Conversation } from "../models/coversation.models.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { getIO } from "../socket/socket.js";
 
 const sendMessage = asyncHandler(async (req, res) => {
 
@@ -62,6 +63,16 @@ const sendMessage = asyncHandler(async (req, res) => {
     const createdMessage = await Message.findById(message._id)
         .populate("sender", "fullname username avatar")
         .populate("attachments")
+        .populate({
+            path: "conversation",
+            select: "_id participants"
+        });
+    const io = getIO();
+
+    io.to(conversationId).emit("new-message", {
+        conversationId,
+        message: createdMessage,
+    });
 
     return res.status(201).json(
         new ApiResponse(

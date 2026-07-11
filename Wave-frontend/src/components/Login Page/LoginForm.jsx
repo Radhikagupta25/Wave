@@ -20,13 +20,19 @@ const LoginForm = () => {
             toast.success(response.data.message);
             socket.connect();
 
-            socket.once("connect", () => {
+            socket.on("connect", () => {
                 console.log("Frontend Connected:", socket.id);
 
                 socket.emit(
                     "setup",
                     response.data.data.user._id
                 );
+            });
+            socket.on("disconnect", (reason) => {
+                console.log("Disconnected:", reason);
+            });
+            socket.on("connect_error", (err) => {
+                console.log(err.message);
             });
             navigate("/chats");
 
