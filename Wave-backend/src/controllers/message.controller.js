@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { Message } from "../models/message.models.js";
-import { Conversation } from "../models/conversation.models.js";
+import { Message } from "../models/messages.model.js";
+import { Conversation } from "../models/coversation.models.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";

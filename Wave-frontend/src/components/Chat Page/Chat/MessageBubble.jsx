@@ -3,7 +3,8 @@ import { motion } from "framer-motion";
 
 const MessageBubble = ({ message }) => {
 
-    const isMe = message.sender === "me";
+    const loggedInUserId = localStorage.getItem("userId");
+    const isMe = message.sender._id === loggedInUserId;
 
     return (
 
@@ -24,8 +25,8 @@ const MessageBubble = ({ message }) => {
             }}
 
             className={`flex ${isMe
-                    ? "justify-end"
-                    : "justify-start"
+                ? "justify-end"
+                : "justify-start"
                 }`}
 
         >
@@ -46,7 +47,7 @@ const MessageBubble = ({ message }) => {
 
                 <p className="leading-7">
 
-                    {message.text}
+                    {message.content}
 
                 </p>
 
@@ -61,7 +62,10 @@ const MessageBubble = ({ message }) => {
 
                 >
 
-                    {message.time}
+                    {new Date(message.createdAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    })}
 
                     {isMe && (
 

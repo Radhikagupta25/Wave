@@ -9,6 +9,7 @@ import { googleLogin } from "../../api/authApi";
 
 const LoginForm = () => {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     const handleGoogleSuccess = async (credentialResponse) => {
         try {
             const response = await googleLogin(
@@ -16,7 +17,6 @@ const LoginForm = () => {
             );
 
             toast.success(response.data.message);
-
             navigate("/chats");
 
         } catch (error) {
@@ -24,6 +24,9 @@ const LoginForm = () => {
                 error.response?.data?.message ||
                 "Google login failed"
             );
+        }
+        finally {
+            setLoading(false);
         }
     };
     const [showPassword, setShowPassword] = useState(false);
@@ -42,14 +45,34 @@ const LoginForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const response = await loginUser(formData);
+
+            localStorage.setItem(
+                "user",
+                JSON.stringify(response.data.data.user)
+            );
+
+            localStorage.setItem(
+                "userId",
+                response.data.data.user._id
+            );
+
+            localStorage.setItem(
+                "accessToken",
+                response.data.data.accessToken
+            );
             toast.success(response.data.message);
-        }
-        catch (error) {
+            navigate("/chats");
+
+        } catch (error) {
             toast.error(
                 error.response?.data?.message || "Something went wrong"
             );
+        }
+        finally {
+            setLoading(false)
         }
     };
 
@@ -151,17 +174,27 @@ const LoginForm = () => {
 
                 <motion.button
                     type="submit"
+                    disabled={loading}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: .97 }}
                     className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-cyan-400 to-blue-600 px-6 py-3 font-semibold text-white shadow-[0_10px_30px_rgba(34,211,238,.35)]"
                 >
 
-                    Sign In
+                    {loading ? (
+                        <>
+                            <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                            Signing in...
+                        </>
+                    ) : (
+                        <>
+                            Sign in
 
-                    <ArrowRight
-                        size={18}
-                        className="transition group-hover:translate-x-1"
-                    />
+                            <ArrowRight
+                                size={18}
+                                className="transition group-hover:translate-x-1"
+                            />
+                        </>
+                    )}
 
                 </motion.button>
 

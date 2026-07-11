@@ -16,12 +16,12 @@ app.use(cookieParser())
 //routes import
 import userRouter from "./routes/user.auth.routes.js"
 import conversationRouter from "./routes/conversation.routes.js"
-import messageRouter from "./routes/conversation.routes.js"
+import messageRouter from "./routes/messages.routes.js"
 
 //routes declaration
 app.use("/api/v1",userRouter)
-app.use("api/v1/conversations", conversationRouter)
-app.use("api/v1/routes", messageRouter)
+app.use("/api/v1/conversations", conversationRouter)
+app.use("/api/v1/messages", messageRouter)
 app.use(errorHandler);
 
 export {app};

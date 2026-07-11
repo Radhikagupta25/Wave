@@ -8,9 +8,9 @@ const ChatList = ({
         <div className="space-y-2">
             {chats.map((chat) => (
                 <ChatCard
-                    key={chat.id}
+                    key={chat._id}
                     chat={chat}
-                    selected={selectedChat?.id === chat.id}
+                    selected={selectedChat?._id === chat._id}
                     onClick={() => setSelectedChat(chat)}
                 />
             ))}

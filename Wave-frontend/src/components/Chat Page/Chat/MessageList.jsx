@@ -1,6 +1,6 @@
 import MessageBubble from "./MessageBubble";
 
-const MessageList = ({ chat }) => {
+const MessageList = ({ messages }) => {
     return (
         <div className="relative flex-1 overflow-y-auto bg-[#08131F] px-8 py-6">
 
@@ -13,9 +13,9 @@ const MessageList = ({ chat }) => {
 
             <div className="relative z-10 mx-auto flex max-w-5xl flex-col gap-4">
 
-                {chat.messages.map((message) => (
+                {messages.map((message) => (
                     <MessageBubble
-                        key={message.id}
+                        key={message._id}
                         message={message}
                     />
                 ))}

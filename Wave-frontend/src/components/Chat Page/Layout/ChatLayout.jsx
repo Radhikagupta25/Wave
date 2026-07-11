@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../Sidebar/Sidebar";
 import ChatHeader from "../Chat/ChatHeader";
 import MessageList from "../Chat/MessageList";
@@ -6,12 +6,45 @@ import MessageInput from "../Chat/MessageInput";
 import MobileHeader from "../Mobile/MobileHeader";
 import dummyData from "../data/dummyData";
 import MobileMenu from "../Mobile/MobileMenu";
+import { getMessages } from "../../../api/messageApi";
+import { getConversations } from "../../../api/conversationApi";
 
 const ChatLayout = () => {
 
     const [selectedChat, setSelectedChat] = useState(null);
     const [mobileChatOpen, setMobileChatOpen] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+    const [conversations, setConversations] = useState([]);
+    const [messages, setMessages] = useState([]);
+    const fetchConversations = async () => {
+        try {
+            const data = await getConversations();
+            setConversations(data);
+            console.log(data)
+        } catch (error) {
+            console.log(error);
+        }
+        finally {
+            console.timeEnd("Fetch Conversations");
+        }
+    };
+    const fetchMessages = async () => {
+        try {
+            const data = await getMessages(selectedChat._id);
+            setMessages(data);
+            console.log(data)
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    useEffect(() => {
+        fetchConversations();
+    }, []);
+    useEffect(() => {
+        if (selectedChat) {
+            fetchMessages();
+        }
+    }, [selectedChat]);
 
     return (
 
@@ -21,7 +54,7 @@ const ChatLayout = () => {
                 <div className="w-90 border-r border-white/10">
 
                     <Sidebar
-                        chats={dummyData}
+                        chats={conversations}
                         selectedChat={selectedChat}
                         setSelectedChat={setSelectedChat}
                     />
@@ -41,7 +74,7 @@ const ChatLayout = () => {
                                 />
 
                                 <MessageList
-                                    chat={selectedChat}
+                                    messages={messages}
                                 />
 
                                 <MessageInput
@@ -95,7 +128,7 @@ const ChatLayout = () => {
                             />
 
                             <MessageList
-                                chat={selectedChat}
+                                messages={messages}
                             />
 
                             <MessageInput
@@ -119,7 +152,7 @@ const ChatLayout = () => {
 
                             <Sidebar
                                 mobile
-                                chats={dummyData}
+                                chats={conversations}
                                 selectedChat={selectedChat}
                                 setSelectedChat={(chat) => {
 
