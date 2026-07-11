@@ -11,10 +11,12 @@ const messageSchema = new mongoose.Schema({
         ref: "Conversation",
         required: true
     },
-    attachment: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Attachment"
-    },
+    attachments: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Attachment",
+        },
+    ],
     content: {
         type: String
     },

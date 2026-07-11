@@ -50,6 +50,83 @@ const MessageBubble = ({ message }) => {
                     {message.content}
 
                 </p>
+                {message.attachments?.length > 0 && (
+
+                    <div className="mt-3 space-y-3">
+
+                        {message.attachments.map((attachment) => {
+
+                            if (attachment.fileType === "image") {
+
+                                return (
+                                    <img
+                                        key={attachment._id}
+                                        src={attachment.url}
+                                        alt={attachment.fileName}
+                                        className="max-h-80 w-full rounded-2xl object-cover"
+                                    />
+                                );
+                            }
+
+                            if (attachment.fileType === "video") {
+
+                                return (
+                                    <video
+                                        key={attachment._id}
+                                        controls
+                                        className="max-h-80 w-full rounded-2xl"
+                                    >
+                                        <source
+                                            src={attachment.url}
+                                            type={attachment.mimeType}
+                                        />
+                                    </video>
+                                );
+                            }
+
+                            if (attachment.fileType === "audio") {
+
+                                return (
+                                    <audio
+                                        key={attachment._id}
+                                        controls
+                                        className="w-full"
+                                    >
+                                        <source
+                                            src={attachment.url}
+                                            type={attachment.mimeType}
+                                        />
+                                    </audio>
+                                );
+                            }
+
+                            return (
+
+                                <a
+                                    key={attachment._id}
+                                    href={attachment.url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3 hover:bg-white/10"
+                                >
+
+                                    📄
+
+                                    <span className="truncate">
+
+                                        {attachment.fileName}
+
+                                    </span>
+
+                                </a>
+
+                            );
+
+                        })}
+
+                    </div>
+
+                )}
 
                 <div
 

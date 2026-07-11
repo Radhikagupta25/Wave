@@ -17,11 +17,13 @@ app.use(cookieParser())
 import userRouter from "./routes/user.auth.routes.js"
 import conversationRouter from "./routes/conversation.routes.js"
 import messageRouter from "./routes/messages.routes.js"
+import attachmentRouter from "./routes/attachment.routes.js"
 
 //routes declaration
 app.use("/api/v1",userRouter)
 app.use("/api/v1/conversations", conversationRouter)
 app.use("/api/v1/messages", messageRouter)
+app.use("/api/v1/attachments",attachmentRouter)
 app.use(errorHandler);
 
 export {app};

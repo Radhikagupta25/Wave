@@ -7,7 +7,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 
 const sendMessage = asyncHandler(async (req, res) => {
 
-    const { conversationId, content } = req.body;
+    const { conversationId, content, attachments = [] } = req.body;
 
     if (!conversationId) {
         throw new ApiError(400, "Conversation id is required");
@@ -17,8 +17,16 @@ const sendMessage = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Invalid conversation id");
     }
 
-    if (!content?.trim()) {
-        throw new ApiError(400, "Message cannot be empty");
+    const messageContent = content?.trim() || "";
+
+    if (
+        !messageContent &&
+        attachments.length === 0
+    ) {
+        throw new ApiError(
+            400,
+            "Message cannot be empty"
+        );
     }
 
     const conversation = await Conversation.findById(conversationId);
@@ -43,6 +51,7 @@ const sendMessage = asyncHandler(async (req, res) => {
         sender: req.user._id,
         conversation: conversationId,
         content: content.trim(),
+        attachments,
     });
 
     conversation.lastMessage = message._id;
@@ -51,7 +60,8 @@ const sendMessage = asyncHandler(async (req, res) => {
     await conversation.save();
 
     const createdMessage = await Message.findById(message._id)
-        .populate("sender", "fullname username avatar");
+        .populate("sender", "fullname username avatar")
+        .populate("attachments")
 
     return res.status(201).json(
         new ApiResponse(
@@ -94,6 +104,7 @@ const getMessages = asyncHandler(async (req, res) => {
     })
         .populate("sender", "fullname username avatar")
         .populate("replyTo")
+        .populate("attachments")
         .sort({
             createdAt: 1,
         });
