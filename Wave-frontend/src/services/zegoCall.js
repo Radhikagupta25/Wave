@@ -3,7 +3,7 @@ import { ZIM } from "zego-zim-web";
 import { logCall } from "../api/messageApi";
 
 let zp = null;
-let activeCall = null; 
+let activeCall = null;
 
 export const setActiveCallContext = (conversationId, callType, isCaller) => {
     activeCall = { conversationId, callType, isCaller, startedAt: null };
@@ -17,19 +17,35 @@ export const initZegoCall = (userId, username) => {
     if (zp) return zp;
 
     const appID = Number(import.meta.env.VITE_ZEGO_APP_ID);
-    const appSign = import.meta.env.VITE_ZEGO_APP_SIGN;
+    const appSign = import.meta.env.VITE_ZEGO_SERVER_SECRET;
 
-    const token = ZegoUIKitPrebuilt.generateKitTokenForTest(
-        appID,
-        appSign,
-        null,
-        userId,
-        username
-    );
+    const appID = Number(import.meta.env.VITE_ZEGO_APP_ID);
+    const appSign = import.meta.env.VITE_ZEGO_SERVER_SECRET;
 
-    zp = ZegoUIKitPrebuilt.create(token);
+    if (!appID || !appSign) {
+        console.error("Missing ZEGO credentials");
+        return null;
+    }
 
-    zp.addPlugins({ ZIM });
+    try {
+        const token = ZegoUIKitPrebuilt.generateKitTokenForTest(
+            appID,
+            appSign,
+            null,
+            userId,
+            username
+        );
+
+        zp = ZegoUIKitPrebuilt.create(token);
+        if (!zp) {
+            throw new Error("Failed to create ZEGO instance");
+        }
+
+        zp.addPlugins({ ZIM });
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
 
     zp.setCallInvitationConfig({
         ringtoneConfig: {
