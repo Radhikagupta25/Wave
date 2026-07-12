@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import GroupInfoPanel from "./GroupInfoPanel";
 
 const ChatMenu = ({
     open,
@@ -32,14 +33,13 @@ const ChatMenu = ({
     );
 
     const [isBlocked, setIsBlocked] = useState(false);
+    const [showGroupInfo, setShowGroupInfo] = useState(false);
 
     useEffect(() => {
         if (me && otherParticipant) {
             setIsBlocked(me.blockedUsers?.includes(otherParticipant._id) || false);
         }
     }, [chat, me, otherParticipant]);
-
-    if (!open || !chat || !me || (!isGroup && !otherParticipant)) return null;
 
     const handleBlockToggle = async () => {
         try {
@@ -65,88 +65,85 @@ const ChatMenu = ({
     };
 
     const dmMenuItems = [
-        {
-            icon: User,
-            label: "View Profile",
-        },
-        {
-            divider: true,
-        },
-        {
-            icon: Ban,
-            label: isBlocked ? "Unblock User" : "Block User",
-            danger: true,
-        },
+        { icon: User, label: "View Profile" },
+        { divider: true },
+        { icon: Ban, label: isBlocked ? "Unblock User" : "Block User", danger: true },
     ];
 
     const groupMenuItems = [
-        {
-            icon: Info,
-            label: "Group Info",
-        },
-        {
-            icon: Users,
-            label: "View Members",
-        },
-        {
-            divider: true,
-        },
-        {
-            icon: LogOut,
-            label: "Leave Group",
-            danger: true,
-        },
+        { icon: Info, label: "Group Info" },
+        { divider: true },
+        { icon: LogOut, label: "Leave Group", danger: true },
     ];
 
     const menuItems = isGroup ? groupMenuItems : dmMenuItems;
+    const showDropdown = open && chat && me && (isGroup || otherParticipant);
 
     return (
-        <AnimatePresence>
-            <motion.div
-                initial={{ opacity: 0, scale: .95, y: -10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: .95, y: -10 }}
-                transition={{ duration: .15 }}
-                className="absolute right-0 top-full mt-2 z-9999 w-60 rounded-2xl border border-white/10 bg-[#0F1B2B] p-2 shadow-[0_15px_40px_rgba(0,0,0,.45)] backdrop-blur-xl"
-            >
-                {menuItems.map((item, index) => {
-                    if (item.divider) {
-                        return (
-                            <div
-                                key={`divider-${index}`}
-                                className="my-2 border-t border-white/10"
-                            />
-                        );
-                    }
+        <>
+            {showDropdown && (
+                <AnimatePresence>
+                    <motion.div
+                        initial={{ opacity: 0, scale: .95, y: -10 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: .95, y: -10 }}
+                        transition={{ duration: .15 }}
+                        className="absolute right-0 top-full mt-2 z-9999 w-60 rounded-2xl border border-white/10 bg-[#0F1B2B] p-2 shadow-[0_15px_40px_rgba(0,0,0,.45)] backdrop-blur-xl"
+                    >
+                        {menuItems.map((item, index) => {
+                            if (item.divider) {
+                                return <div key={`divider-${index}`} className="my-2 border-t border-white/10" />;
+                            }
 
-                    const Icon = item.icon;
+                            const Icon = item.icon;
 
-                    return (
-                        <button
-                            key={item.label}
-                            onClick={() => {
-                                if (item.icon === Ban) {
-                                    handleBlockToggle();
-                                } else if (item.icon === User) {
-                                    navigate(`/profile/${otherParticipant._id}`);
-                                    onClose();
-                                } else {
-                                    onClose();
-                                }
-                            }}
-                            className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm transition
-                                ${item.danger
-                                    ? "text-red-400 hover:bg-red-500/10"
-                                    : "text-slate-300 hover:bg-white/5 hover:text-cyan-300"
-                                }`}
-                        >
-                            <Icon size={18} />
-                            {item.label}
-                        </button>
-                    );
-                })}
-            </motion.div>
-        </AnimatePresence>
+                            return (
+                                <button
+                                    key={item.label}
+                                    onClick={() => {
+                                        if (item.icon === Ban) {
+                                            handleBlockToggle();
+                                        } else if (item.icon === User) {
+                                            navigate(`/profile/${otherParticipant._id}`);
+                                            onClose();
+                                        } else if (
+                                            item.icon === Info ||
+                                            item.icon === Users ||
+                                            item.icon === LogOut
+                                        ) {
+                                            setShowGroupInfo(true);
+                                            onClose();
+                                        } else {
+                                            onClose();
+                                        }
+                                    }}
+                                    className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm transition
+                                        ${item.danger
+                                            ? "text-red-400 hover:bg-red-500/10"
+                                            : "text-slate-300 hover:bg-white/5 hover:text-cyan-300"
+                                        }`}
+                                >
+                                    <Icon size={18} />
+                                    {item.label}
+                                </button>
+                            );
+                        })}
+                    </motion.div>
+                </AnimatePresence>
+            )}
+
+            {isGroup && chat && (
+                <GroupInfoPanel
+                    open={showGroupInfo}
+                    onClose={() => setShowGroupInfo(false)}
+                    conversationId={chat._id}
+                    onLeft={() => {
+                        if (fetchConversations) fetchConversations();
+                        if (setSelectedChat) setSelectedChat(null);
+                    }}
+                />
+            )}
+        </>
     );
 };
 
