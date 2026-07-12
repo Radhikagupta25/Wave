@@ -1,0 +1,591 @@
+{
+  "info": {
+    "_postman_id": "24b695c6-41f0-4a33-94ba-9d0992962f39",
+    "name": "Wave",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "49385006",
+    "_collection_link": "https://go.postman.co/collection/49385006-24b695c6-41f0-4a33-94ba-9d0992962f39?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Conversation",
+      "item": [
+        {
+          "name": "Create or get conversation",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"participantId\": \"6a4fe79f4c6e579087833613\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/conversations",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "conversations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all conversations",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Get conversation by ID",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Create group",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"groupName\": \"avengers\",\r\n    \"participantIds\":[\r\n        \"6a4fdeb5abc9b4a18cf49c9f\",\r\n        \"6a4ff516af50bc75e85378c5\"\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/conversations/group",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "conversations",
+                "group"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Leave group",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/v1/conversations/leave/6a5389db8a0668aa510952d1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "conversations",
+                "leave",
+                "6a5389db8a0668aa510952d1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get group info",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/v1/conversations/make-admin/6a536c596685cc92447aa7cf/6a4fdeb5abc9b4a18cf49c9f",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "conversations",
+                "make-admin",
+                "6a536c596685cc92447aa7cf",
+                "6a4fdeb5abc9b4a18cf49c9f"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Make group admin",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Add participants to group",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Remove member from group",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/v1/conversations/remove-member/6a536c596685cc92447aa7cf/6a4fdeb5abc9b4a18cf49c9f",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "conversations",
+                "remove-member",
+                "6a536c596685cc92447aa7cf",
+                "6a4fdeb5abc9b4a18cf49c9f"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Message",
+      "item": [
+        {
+          "name": "Send message",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"conversationId\": \"6a521a2fe2558fcaa0b1db8e\",\r\n    \"content\": \"Hi\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/messages",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "messages"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get messages",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "message seen",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Edit message",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"content\": \"Radhika25\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/messages/6a521bafd96ab970d60947ab",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "messages",
+                "6a521bafd96ab970d60947ab"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle reaction",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"emoji\": \":)\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/messages/6a521bafd96ab970d60947ab/react",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "messages",
+                "6a521bafd96ab970d60947ab",
+                "react"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete message",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/messages/6a521bafd96ab970d60947ab",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "messages",
+                "6a521bafd96ab970d60947ab"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Call log",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"conversationId\":\r\n    \"calltype\":\r\n    \"status\":\r\n    \"duration:\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/messages/call-log",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "messages",
+                "call-log"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "User register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "fullname",
+                  "value": "Radhika Gupta",
+                  "type": "text",
+                  "uuid": "f8b3edab-e77d-4883-a3c3-d4c5c81f8c95"
+                },
+                {
+                  "key": "username",
+                  "value": "Radhika",
+                  "type": "text",
+                  "uuid": "d68ce704-0631-4233-9ddd-1b08a91b7512"
+                },
+                {
+                  "key": "password",
+                  "value": "Radhika25",
+                  "type": "text",
+                  "uuid": "4b04be67-1580-4924-8209-494cff9f9409"
+                },
+                {
+                  "key": "email",
+                  "value": "radhikaaaguptaaa25@gmail.com",
+                  "type": "text",
+                  "uuid": "a83e04b4-a076-42a8-a159-ed2af8a51615"
+                },
+                {
+                  "key": "avatar",
+                  "type": "file",
+                  "uuid": "07b1c017-eba0-4b30-a11c-fcc46ed1c8a8",
+                  "src": "/C:/Users/Radhika gupta/Downloads/WhatsApp Image 2026-06-24 at 10.14.50 PM.jpeg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Email verification",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\" : \"radhikaaaguptaaa25@gmail.com\",\r\n    \"otp\": \"692831\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/verify-email",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "verify-email"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "User login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\" : \"radhikaaaguptaaa25@gmail.com\",\r\n    \"password\" : \"Radhika25\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search users",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"participantId\": \"6a4fe79f4c6e579087833613\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/search-users?query=an",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "search-users"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "an"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Block user",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/block/6a4fdeb5abc9b4a18cf49c9f",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "block",
+                "6a4fdeb5abc9b4a18cf49c9f"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Unblock user",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/v1/unblock/6a4fdeb5abc9b4a18cf49c9f",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "unblock",
+                "6a4fdeb5abc9b4a18cf49c9f"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get user profile",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/profile/6a521929e2558fcaa0b1db8d",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "v1",
+                "profile",
+                "6a521929e2558fcaa0b1db8d"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Attachments",
+      "item": [
+        {
+          "name": "New Request",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

@@ -385,7 +385,7 @@ const removeMember = asyncHandler(async (req, res) => {
 const addParticipants = asyncHandler(async (req, res) => {
 
     const { conversationId } = req.params;
-    const { userIds } = req.body; // array of user ids to add
+    const { userIds } = req.body; 
 
     if (!mongoose.Types.ObjectId.isValid(conversationId)) {
         throw new ApiError(400, "Invalid conversation id");
