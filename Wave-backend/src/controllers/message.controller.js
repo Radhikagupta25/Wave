@@ -192,8 +192,148 @@ const markMessagesAsSeen = asyncHandler(async (req, res) => {
     );
 });
 
+
+const editMessage = asyncHandler(async (req, res) => {
+    const { messageId } = req.params;
+    const { content } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(messageId)) {
+        throw new ApiError(400, "Invalid message id");
+    }
+
+    const trimmedContent = content?.trim();
+
+    if (!trimmedContent) {
+        throw new ApiError(400, "Message content cannot be empty");
+    }
+
+    const message = await Message.findById(messageId);
+
+    if (!message) {
+        throw new ApiError(404, "Message not found");
+    }
+
+    if (message.sender.toString() !== req.user._id.toString()) {
+        throw new ApiError(403, "You can only edit your own messages");
+    }
+
+    if (message.isDeleted) {
+        throw new ApiError(400, "Cannot edit a deleted message");
+    }
+
+    message.content = trimmedContent;
+    message.isEdited = true;
+    await message.save();
+
+    const updatedMessage = await Message.findById(messageId)
+        .populate("sender", "fullname username avatar")
+        .populate("attachments")
+        .populate("replyTo");
+
+    const io = getIO();
+    io.to(message.conversation.toString()).emit("message-edited", {
+        conversationId: message.conversation,
+        message: updatedMessage,
+    });
+
+    return res.status(200).json(
+        new ApiResponse(200, updatedMessage, "Message edited successfully")
+    );
+});
+
+const deleteMessage = asyncHandler(async (req, res) => {
+    const { messageId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(messageId)) {
+        throw new ApiError(400, "Invalid message id");
+    }
+
+    const message = await Message.findById(messageId);
+
+    if (!message) {
+        throw new ApiError(404, "Message not found");
+    }
+
+    if (message.sender.toString() !== req.user._id.toString()) {
+        throw new ApiError(403, "You can only delete your own messages");
+    }
+
+    message.content = "";
+    message.attachments = [];
+    message.reactions = [];
+    message.isDeleted = true;
+    await message.save();
+
+    const io = getIO();
+    io.to(message.conversation.toString()).emit("message-deleted", {
+        conversationId: message.conversation,
+        messageId: message._id,
+    });
+
+    return res.status(200).json(
+        new ApiResponse(200, { messageId }, "Message deleted successfully")
+    );
+});
+
+const toggleReaction = asyncHandler(async (req, res) => {
+    const { messageId } = req.params;
+    const { emoji } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(messageId)) {
+        throw new ApiError(400, "Invalid message id");
+    }
+
+    if (!emoji) {
+        throw new ApiError(400, "Emoji is required");
+    }
+
+    const message = await Message.findById(messageId);
+
+    if (!message) {
+        throw new ApiError(404, "Message not found");
+    }
+
+    if (message.isDeleted) {
+        throw new ApiError(400, "Cannot react to a deleted message");
+    }
+
+    const existingIndex = message.reactions.findIndex(
+        (r) => r.user.toString() === req.user._id.toString()
+    );
+
+    if (existingIndex !== -1) {
+        const existing = message.reactions[existingIndex];
+        if (existing.emoji === emoji) {
+            message.reactions.splice(existingIndex, 1); 
+        } else {
+            existing.emoji = emoji; 
+        }
+    } else {
+        message.reactions.push({ user: req.user._id, emoji });
+    }
+
+    await message.save();
+
+    const updatedMessage = await Message.findById(messageId)
+        .populate("reactions.user", "username fullname avatar");
+
+    const io = getIO();
+    io.to(message.conversation.toString()).emit("message-reaction", {
+        conversationId: message.conversation,
+        messageId: message._id,
+        reactions: updatedMessage.reactions,
+    });
+
+    return res.status(200).json(
+        new ApiResponse(200, { reactions: updatedMessage.reactions }, "Reaction updated")
+    );
+});
+
 export {
     sendMessage,
     getMessages,
-    markMessagesAsSeen
+    markMessagesAsSeen,
+    editMessage,
+    deleteMessage,
+    toggleReaction
 };

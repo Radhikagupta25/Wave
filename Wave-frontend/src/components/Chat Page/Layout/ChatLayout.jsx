@@ -10,6 +10,7 @@ import { getConversations } from "../../../api/conversationApi";
 import { useLocation } from "react-router-dom";
 import { socket } from "../../../services/socket";
 import { markMessagesAsSeen } from "../../../api/messageApi";
+import { editMessage, deleteMessage, toggleReaction } from "../../../api/messageApi";
 
 const ChatLayout = () => {
 
@@ -245,6 +246,64 @@ const ChatLayout = () => {
         }
         : null;
 
+    useEffect(() => {
+        const handleMessageEdited = ({ conversationId, message }) => {
+            if (conversationId !== selectedChat?._id) return;
+            setMessages(prev => prev.map(m => (m._id === message._id ? message : m)));
+        };
+
+        const handleMessageDeleted = ({ conversationId, messageId }) => {
+            if (conversationId !== selectedChat?._id) return;
+            setMessages(prev =>
+                prev.map(m => (m._id === messageId ? { ...m, isDeleted: true, content: "", attachments: [], reactions: [] } : m))
+            );
+        };
+
+        const handleMessageReaction = ({ conversationId, messageId, reactions }) => {
+            if (conversationId !== selectedChat?._id) return;
+            setMessages(prev => prev.map(m => (m._id === messageId ? { ...m, reactions } : m)));
+        };
+
+        socket.on("message-edited", handleMessageEdited);
+        socket.on("message-deleted", handleMessageDeleted);
+        socket.on("message-reaction", handleMessageReaction);
+
+        return () => {
+            socket.off("message-edited", handleMessageEdited);
+            socket.off("message-deleted", handleMessageDeleted);
+            socket.off("message-reaction", handleMessageReaction);
+        };
+    }, [selectedChat]);
+
+    const handleEditMessage = async (messageId, content) => {
+        try {
+            const updated = await editMessage(messageId, content);
+            setMessages(prev => prev.map(m => (m._id === messageId ? updated : m)));
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleDeleteMessage = async (messageId) => {
+        try {
+            await deleteMessage(messageId);
+            setMessages(prev =>
+                prev.map(m => (m._id === messageId ? { ...m, isDeleted: true, content: "", attachments: [], reactions: [] } : m))
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleReactToMessage = async (messageId, emoji) => {
+        try {
+            const { reactions } = await toggleReaction(messageId, emoji);
+            setMessages(prev => prev.map(m => (m._id === messageId ? { ...m, reactions } : m)));
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
 
         <div className="h-screen bg-[#08131F] text-white">
@@ -268,6 +327,9 @@ const ChatLayout = () => {
                                 messages={messages}
                                 selectedChat={selectedChat}
                                 isTyping={!!typingUserId}
+                                onEdit={handleEditMessage}
+                                onDelete={handleDeleteMessage}
+                                onReact={handleReactToMessage}
                             />
                             <MessageInput
                                 chat={selectedChat}
@@ -301,6 +363,9 @@ const ChatLayout = () => {
                             messages={messages}
                             selectedChat={selectedChat}
                             isTyping={!!typingUserId}
+                            onEdit={handleEditMessage}
+                            onDelete={handleDeleteMessage}
+                            onReact={handleReactToMessage}
                         />
                         <MessageInput
                             chat={selectedChat}

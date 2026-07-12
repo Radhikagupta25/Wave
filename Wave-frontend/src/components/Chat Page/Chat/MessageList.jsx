@@ -2,7 +2,7 @@ import MessageBubble from "./MessageBubble";
 import TypingIndicator from "./TypingIndicator";
 import { useEffect, useRef } from "react";
 
-const MessageList = ({ messages, selectedChat, isTyping }) => {
+const MessageList = ({ messages, selectedChat, isTyping, onEdit, onDelete, onReact }) => {
     const bottomRef = useRef(null);
 
     useEffect(() => {
@@ -34,6 +34,9 @@ const MessageList = ({ messages, selectedChat, isTyping }) => {
                         key={message._id}
                         message={message}
                         isGroup={selectedChat?.isGroup}
+                        onEdit={onEdit}
+                        onDelete={onDelete}
+                        onReact={onReact}
                     />
                 ))}
 
