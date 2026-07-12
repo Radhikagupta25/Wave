@@ -9,16 +9,18 @@ import { blockUser, unblockUser } from "../../../api/authApi";
 import { toast } from "sonner";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ChatMenu = ({
     open,
     onClose,
     isGroup = false,
     chat,
-    fetchConversations, // Added as prop
-    setSelectedChat     // Added as prop
+    fetchConversations,
+    setSelectedChat
 }) => {
 
+    const navigate = useNavigate();
     const loggedInUser = JSON.parse(localStorage.getItem("user"));
 
     const me = chat?.participants?.find(
@@ -29,7 +31,6 @@ const ChatMenu = ({
         participant => participant._id !== loggedInUser?._id
     );
 
-    // Keep state in sync if the chat prop changes from the parent
     const [isBlocked, setIsBlocked] = useState(false);
 
     useEffect(() => {
@@ -52,15 +53,7 @@ const ChatMenu = ({
                 toast.success("User blocked");
             }
 
-            // Safely trigger parent refreshes if they were passed down
             if (fetchConversations) await fetchConversations();
-
-            // Optional: If your backend returns the newly updated chat object, 
-            // you can pass it to setSelectedChat here. Otherwise, fetchConversations handles it.
-
-            // Commenting out onClose() so the user can see the button text switch immediately.
-            // Remove the comment below if you prefer it to close right away.
-            // onClose(); 
 
         } catch (err) {
             toast.error(
@@ -134,6 +127,9 @@ const ChatMenu = ({
                             onClick={() => {
                                 if (item.icon === Ban) {
                                     handleBlockToggle();
+                                } else if (item.icon === User) {
+                                    navigate(`/profile/${otherParticipant._id}`);
+                                    onClose();
                                 } else {
                                     onClose();
                                 }

@@ -709,6 +709,27 @@ const unblockUser = asyncHandler(async (req, res) => {
 
 });
 
+const getUserProfile = asyncHandler(async (req, res) => {
+    const { userId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        throw new ApiError(400, "Invalid user id");
+    }
+    const user = await User.findById(userId).select(
+        "fullname username email avatar createdAt"
+    );
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            user,
+            "User profile fetched successfully"
+        )
+    );
+
+});
+
 export {
     registerUser,
     loginUser,
@@ -727,5 +748,6 @@ export {
     googleSignup,
     searchUsers,
     blockUser,
-    unblockUser
+    unblockUser,
+    getUserProfile
 }

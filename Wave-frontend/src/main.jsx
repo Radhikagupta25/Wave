@@ -13,6 +13,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import ChatPage from "./pages/ChatPage";
 import CreateNewChatPage from "./pages/CreateNewChatPage";
 import CreateGroupPage from "./pages/CreateGroupPage";
+import Profile from "./pages/Profile";
 
 const router = createBrowserRouter([
     {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
     {
         path: "/new-group",
         element: <CreateGroupPage />,
+    },
+    {
+        path: "/profile/:userId",
+        element: <Profile />,
     },
 ]);
 

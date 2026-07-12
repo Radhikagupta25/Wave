@@ -60,3 +60,8 @@ export const blockUser = (userId) =>
 
 export const unblockUser = (userId) =>
     api.patch(`/unblock/${userId}`);
+
+export const getUserProfile = async (userId) => {
+    const { data } = await api.get(`/profile/${userId}`);
+    return data.data;
+};
