@@ -22,6 +22,12 @@
 
 ---
 
+## 🚀 Live Demo
+
+Experience Wave in action: **[Wave](https://wave-nzpml2fvr-radhika-guptas-projects-cc42e461.vercel.app/)**
+
+---
+
 ## About
 
 **Wave** is a full-stack real-time chat application built on the MERN stack, designed to replicate the core experience of modern messaging apps — live delivery, presence, typing indicators, read receipts, group conversations, and in-app calling — all wired together over a persistent Socket.io connection layered on a REST API.
