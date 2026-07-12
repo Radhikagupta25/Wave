@@ -1,6 +1,22 @@
 import MessageBubble from "./MessageBubble";
+import TypingIndicator from "./TypingIndicator";
+import { useEffect, useRef } from "react";
 
-const MessageList = ({ messages }) => {
+const MessageList = ({ messages, selectedChat, isTyping }) => {
+    const bottomRef = useRef(null);
+
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({
+            behavior: "auto",
+        });
+    }, [selectedChat]);
+
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({
+            behavior: "smooth",
+        });
+    }, [messages, isTyping]);
+
     return (
         <div className="relative flex-1 overflow-y-auto bg-[#08131F] px-8 py-6">
 
@@ -19,6 +35,10 @@ const MessageList = ({ messages }) => {
                         message={message}
                     />
                 ))}
+
+                {isTyping && <TypingIndicator />}
+
+                <div ref={bottomRef} />
 
             </div>
 

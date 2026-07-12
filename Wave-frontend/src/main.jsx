@@ -49,15 +49,15 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-    <React.StrictMode>
-        <GoogleOAuthProvider
-            clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
-        >
-            <RouterProvider router={router} />
-            <Toaster
-                richColors
-                position="top-center"
-            />
-        </GoogleOAuthProvider>
-    </React.StrictMode>
+
+    <GoogleOAuthProvider
+        clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+    >
+        <RouterProvider router={router} />
+        <Toaster
+            richColors
+            position="top-center"
+        />
+    </GoogleOAuthProvider>
+
 );

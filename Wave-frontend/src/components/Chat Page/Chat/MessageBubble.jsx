@@ -143,23 +143,12 @@ const MessageBubble = ({ message }) => {
                         hour: "2-digit",
                         minute: "2-digit"
                     })}
-
                     {isMe && (
-
-                        message.seen
-
-                            ?
-
-                            <CheckCheck
-                                size={14}
-                            />
-
-                            :
-
-                            <Check
-                                size={14}
-                            />
-
+                        message.seenBy?.length > 0 ? (
+                            <CheckCheck size={14} />
+                        ) : (
+                            <Check size={14} />
+                        )
                     )}
 
                 </div>

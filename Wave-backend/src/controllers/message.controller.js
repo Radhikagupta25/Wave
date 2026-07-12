@@ -51,7 +51,7 @@ const sendMessage = asyncHandler(async (req, res) => {
     const message = await Message.create({
         sender: req.user._id,
         conversation: conversationId,
-        content: content.trim(),
+        content: messageContent,
         attachments,
     });
 
@@ -130,7 +130,42 @@ const getMessages = asyncHandler(async (req, res) => {
 
 });
 
+const markMessagesAsSeen = asyncHandler(async (req, res) => {
+    const { conversationId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(conversationId)) {
+        throw new ApiError(400, "Invalid conversation id");
+    }
+
+    const unseenMessages = await Message.find({
+        conversation: conversationId,
+        sender: { $ne: req.user._id },
+        seenBy: { $ne: req.user._id }
+    }).select("_id");
+
+    const messageIds = unseenMessages.map(m => m._id);
+
+    if (messageIds.length > 0) {
+        await Message.updateMany(
+            { _id: { $in: messageIds } },
+            { $push: { seenBy: req.user._id } }
+        );
+    }
+
+    const io = getIO();
+
+    io.to(conversationId).emit("messages-seen", {
+        conversationId,
+        userId: req.user._id,
+        messageIds,
+    });
+
+    return res.status(200).json(
+        new ApiResponse(200, { messageIds }, "Messages marked as seen")
+    );
+});
+
 export {
     sendMessage,
     getMessages,
+    markMessagesAsSeen
 };

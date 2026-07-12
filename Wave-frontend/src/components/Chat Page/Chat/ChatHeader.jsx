@@ -13,6 +13,7 @@ const ChatHeader = ({
     chat,
     mobile = false,
     onBack,
+    isTyping = false,
 }) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const loggedInUserId = localStorage.getItem("userId");
@@ -65,9 +66,15 @@ const ChatHeader = ({
                         {otherUser?.username.charAt(0).toUpperCase() + otherUser?.username.slice(1) || "Unknown User"}
                     </h2>
 
-                    <p className="text-xs text-green-400">
-                        Offline
-                    </p>
+                    {isTyping ? (
+                        <p className="text-xs text-cyan-300">
+                            typing...
+                        </p>
+                    ) : (
+                        <p className={`text-xs ${chat.online ? "text-green-400" : "text-slate-400"}`}>
+                            {chat.online ? "Online" : "Offline"}
+                        </p>
+                    )}
 
                 </div>
 

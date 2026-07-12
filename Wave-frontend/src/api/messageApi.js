@@ -8,3 +8,7 @@ export const getMessages = async (conversationId) => {
 export const sendMessage = (data) => {
     return api.post("/messages", data);
 };
+
+export const markMessagesAsSeen = (conversationId) => {
+    return api.patch(`/messages/${conversationId}/seen`);
+};

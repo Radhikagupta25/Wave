@@ -1,6 +1,6 @@
 let io;
 
-const onlineUsers = new Map();
+const onlineUsers = new Map(); // userId -> socketId
 
 export const initializeSocket = (socketServer) => {
     io = socketServer;
@@ -8,7 +8,10 @@ export const initializeSocket = (socketServer) => {
     io.on("connection", (socket) => {
 
         socket.on("setup", (userId) => {
+            socket.userId = userId;
             onlineUsers.set(userId, socket.id);
+            socket.broadcast.emit("user-online", { userId });
+            socket.emit("online-users", { userIds: Array.from(onlineUsers.keys()) });
         });
 
         socket.on("join-conversation", (conversationId) => {
@@ -19,12 +22,19 @@ export const initializeSocket = (socketServer) => {
             socket.leave(conversationId);
         });
 
+        socket.on("typing", ({ conversationId, userId }) => {
+            socket.to(conversationId).emit("typing", { conversationId, userId });
+        });
+
+        socket.on("stop-typing", ({ conversationId, userId }) => {
+            socket.to(conversationId).emit("stop-typing", { conversationId, userId });
+        });
+
         socket.on("disconnect", () => {
-            for (const [userId, socketId] of onlineUsers.entries()) {
-                if (socketId === socket.id) {
-                    onlineUsers.delete(userId);
-                    break;
-                }
+            if (!socket.userId) return;
+            if (onlineUsers.get(socket.userId) === socket.id) {
+                onlineUsers.delete(socket.userId);
+                io.emit("user-offline", { userId: socket.userId });
             }
         });
 
