@@ -132,7 +132,7 @@ const ResetPasswordForm = () => {
                 onSubmit={handleSubmit}
             >
                 <div>
-                    <label className="mb-2 block text-sm text-slate-300">
+                    <label className="mb-2 block text-sm" style={{ color: "#e2e8f0" }}>
                         Verification Code
                     </label>
 
@@ -155,7 +155,7 @@ const ResetPasswordForm = () => {
                     />
                 </div>
                 <div>
-                    <label className="mb-2 block text-sm text-slate-300">
+                    <label className="mb-2 block text-sm" style={{ color: "#e2e8f0" }}>
                         New Password
                     </label>
 
@@ -197,7 +197,7 @@ const ResetPasswordForm = () => {
                 </div>
 
                 <div>
-                    <label className="mb-2 block text-sm text-slate-300">
+                    <label className="mb-2 block text-sm" style={{ color: "#e2e8f0" }}>
                         Confirm Password
                     </label>
 

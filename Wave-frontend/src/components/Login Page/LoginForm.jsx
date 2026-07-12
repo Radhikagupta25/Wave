@@ -117,7 +117,7 @@ const LoginForm = () => {
             <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
                 <div>
 
-                    <label className="mb-2 block text-sm text-slate-300">
+                    <label className="mb-2 block text-sm" style={{ color: "#e2e8f0" }}>
                         Email
                     </label>
 
@@ -139,7 +139,7 @@ const LoginForm = () => {
                 </div>
                 <div>
 
-                    <label className="mb-2 block text-sm text-slate-300">
+                    <label className="mb-2 block text-sm" style={{ color: "#e2e8f0" }}>
                         Password
                     </label>
 
