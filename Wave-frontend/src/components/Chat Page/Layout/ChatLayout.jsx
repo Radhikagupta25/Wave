@@ -11,6 +11,7 @@ import { useLocation } from "react-router-dom";
 import { socket } from "../../../services/socket";
 import { markMessagesAsSeen } from "../../../api/messageApi";
 import { editMessage, deleteMessage, toggleReaction } from "../../../api/messageApi";
+import { initZegoCall } from "../../../services/zegoCall";
 
 const ChatLayout = () => {
 
@@ -304,9 +305,19 @@ const ChatLayout = () => {
         }
     };
 
+    useEffect(() => {
+        if (!loggedInUserId) return;
+
+        const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+        const username = storedUser?.username || "User";
+
+        initZegoCall(loggedInUserId, username);
+    }, []);
+
     return (
 
         <div className="h-screen bg-[#08131F] text-white">
+            <div id="zego-call-container" style={{ position: "fixed", inset: 0, zIndex: 99999, pointerEvents: "none" }} />
             <div className="hidden h-full lg:flex">
                 <div className="w-90 border-r border-white/10">
                     <Sidebar

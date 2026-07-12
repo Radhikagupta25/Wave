@@ -6,7 +6,15 @@ import {
     Music,
     Paperclip,
     Users,
+    Phone,
+    PhoneMissed,
 } from "lucide-react";
+
+const formatDuration = (seconds) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s.toString().padStart(2, "0")}`;
+};
 
 const ChatCard = ({
     chat,
@@ -74,6 +82,25 @@ const ChatCard = ({
 
     };
 
+    const getCallPreview = (lastMessage) => {
+        const { callType, status, duration } = lastMessage.callInfo || {};
+        const isMissed = status === "missed" || status === "declined" || status === "cancelled";
+        const Icon = callType === "video" ? Video : (isMissed ? PhoneMissed : Phone);
+
+        const label =
+            status === "missed" ? "Missed call" :
+                status === "declined" ? "Call declined" :
+                    status === "cancelled" ? "Call cancelled" :
+                        `${callType === "video" ? "Video" : "Voice"} call · ${formatDuration(duration || 0)}`;
+
+        return (
+            <span className={`flex items-center gap-2 ${isMissed ? "text-red-400" : ""}`}>
+                <Icon size={15} className={isMissed ? "text-red-400" : "text-cyan-400"} />
+                {label}
+            </span>
+        );
+    };
+
     const hasUnread = chat.unreadCount > 0;
 
     return (
@@ -129,7 +156,11 @@ const ChatCard = ({
 
                     <div className={`truncate text-sm ${hasUnread ? "text-slate-200" : "text-slate-400"}`}>
 
-                        {chat.lastMessage?.content ? (
+                        {chat.lastMessage?.messageType === "call" ? (
+
+                            getCallPreview(chat.lastMessage)
+
+                        ) : chat.lastMessage?.content ? (
 
                             chat.isGroup && chat.lastMessage?.sender?.username
                                 ? `${chat.lastMessage.sender.username}: ${chat.lastMessage.content}`
@@ -160,4 +191,4 @@ const ChatCard = ({
     );
 };
 
-export default ChatCard;
+export default ChatCard;    

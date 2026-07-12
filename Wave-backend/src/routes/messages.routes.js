@@ -5,7 +5,8 @@ import {
     markMessagesAsSeen,
     editMessage,
     deleteMessage,
-    toggleReaction
+    toggleReaction,
+    logCall
 } from "../controllers/message.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -24,5 +25,7 @@ router.patch("/:messageId", verifyJWT, editMessage);
 router.delete("/:messageId", verifyJWT, deleteMessage);
 
 router.post("/:messageId/react", verifyJWT, toggleReaction);
+
+router.post("/call-log", logCall);
 
 export default router;

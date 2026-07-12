@@ -27,3 +27,7 @@ export const toggleReaction = async (messageId, emoji) => {
     const { data } = await api.post(`/messages/${messageId}/react`, { emoji });
     return data.data;
 };
+
+export const logCall = (conversationId, callType, status, duration) => {
+    return api.post("/messages/call-log", { conversationId, callType, status, duration });
+};

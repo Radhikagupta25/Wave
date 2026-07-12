@@ -46,7 +46,26 @@ const messageSchema = new mongoose.Schema({
     isEdited: {
         type: Boolean,
         default: false
-    }
+    },
+    messageType: {
+        type: String,
+        enum: ["text", "call"],
+        default: "text",
+    },
+    callInfo: {
+        callType: {
+            type: String,
+            enum: ["voice", "video"],
+        },
+        status: {
+            type: String,
+            enum: ["completed", "missed", "declined", "cancelled"],
+        },
+        duration: {
+            type: Number, 
+            default: 0,
+        },
+    },
 
 }, {
     timestamps: true

@@ -329,11 +329,64 @@ const toggleReaction = asyncHandler(async (req, res) => {
     );
 });
 
+const logCall = asyncHandler(async (req, res) => {
+
+    const { conversationId, callType, status, duration = 0 } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(conversationId)) {
+        throw new ApiError(400, "Invalid conversation id");
+    }
+
+    const conversation = await Conversation.findById(conversationId);
+
+    if (!conversation) {
+        throw new ApiError(404, "Conversation not found");
+    }
+
+    if (
+        !conversation.participants.some(
+            participant => participant.toString() === req.user._id.toString()
+        )
+    ) {
+        throw new ApiError(403, "You are not a participant of this conversation");
+    }
+
+    const message = await Message.create({
+        sender: req.user._id,
+        conversation: conversationId,
+        messageType: "call",
+        callInfo: { callType, status, duration },
+    });
+
+    conversation.lastMessage = message._id;
+    conversation.lastMessageAt = message.createdAt;
+    await conversation.save();
+
+    const createdMessage = await Message.findById(message._id)
+        .populate("sender", "fullname username avatar")
+        .populate({ path: "conversation", select: "_id participants" });
+
+    const io = getIO();
+
+    conversation.participants.forEach((participantId) => {
+        io.to(participantId.toString()).emit("new-message", {
+            conversationId,
+            message: createdMessage,
+        });
+    });
+
+    return res.status(201).json(
+        new ApiResponse(201, createdMessage, "Call logged")
+    );
+
+});
+
 export {
     sendMessage,
     getMessages,
     markMessagesAsSeen,
     editMessage,
     deleteMessage,
-    toggleReaction
+    toggleReaction,
+    logCall
 };

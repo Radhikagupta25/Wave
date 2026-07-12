@@ -59,7 +59,10 @@ const MobileMenu = ({ open, onClose }) => {
             icon: LogOut,
             label: "Logout",
             danger: true,
-            onClick: handleLogout,
+            onClick: ()=>{
+                handleLogout;
+                navigate("/")
+            }
         },
     ];
 

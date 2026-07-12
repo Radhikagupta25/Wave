@@ -9,6 +9,7 @@ import {
 import { motion } from "framer-motion";
 import { useState } from "react";
 import ChatMenu from "./ChatMenu";
+import { startGroupCall, startVideoCall, startVoiceCall } from "../../../services/zegoCall";
 
 const ChatHeader = ({
     chat,
@@ -98,8 +99,15 @@ const ChatHeader = ({
             </div>
 
             <div className="flex items-center gap-2">
-
                 <button
+                    onClick={() => {
+                        if (chat.isGroup) {
+                            const others = chat.participants.filter(p => p._id !== loggedInUserId);
+                            startGroupCall(others, false, chat._id);
+                        } else {
+                            startVoiceCall(otherUser._id, otherUser.username, chat._id);
+                        }
+                    }}
                     className={`${mobile
                         ? "rounded-xl p-2"
                         : "rounded-2xl border border-white/10 bg-white/5 p-3"
@@ -109,6 +117,14 @@ const ChatHeader = ({
                 </button>
 
                 <button
+                    onClick={() => {
+                        if (chat.isGroup) {
+                            const others = chat.participants.filter(p => p._id !== loggedInUserId);
+                            startGroupCall(others, true, chat._id);
+                        } else {
+                            startVideoCall(otherUser._id, otherUser.username, chat._id);
+                        }
+                    }}
                     className={`${mobile
                         ? "rounded-xl p-2"
                         : "rounded-2xl border border-white/10 bg-white/5 p-3"

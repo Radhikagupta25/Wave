@@ -1,9 +1,15 @@
 import { useState } from "react";
-import { Check, CheckCheck, Pencil, Trash2, SmilePlus, X } from "lucide-react";
+import { Check, CheckCheck, Pencil, Trash2, SmilePlus, X, Phone, Video, PhoneMissed } from "lucide-react";
 import { motion } from "framer-motion";
 import { editMessage, deleteMessage, toggleReaction } from "../../../api/messageApi";
 
 const QUICK_EMOJIS = ["👍", "❤️", "😂", "😮", "😢", "🙏"];
+
+const formatDuration = (seconds) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s.toString().padStart(2, "0")}`;
+};
 
 const MessageBubble = ({ message, isGroup = false }) => {
 
@@ -82,6 +88,32 @@ const MessageBubble = ({ message, isGroup = false }) => {
         }
         return acc;
     }, []);
+
+    if (localMessage.messageType === "call") {
+        const { callType, status, duration } = localMessage.callInfo || {};
+        const isMissed = status === "missed" || status === "declined" || status === "cancelled";
+        const Icon = callType === "video" ? Video : (isMissed ? PhoneMissed : Phone);
+
+        const label =
+            status === "missed" ? "Missed call" :
+                status === "declined" ? "Call declined" :
+                    status === "cancelled" ? "Call cancelled" :
+                        `${callType === "video" ? "Video" : "Voice"} call · ${formatDuration(duration || 0)}`;
+
+        return (
+            <div className="flex justify-center">
+                <div className={`flex items-center gap-2 rounded-full border px-4 py-2 text-xs
+                    ${isMissed
+                        ? "border-red-400/30 bg-red-500/10 text-red-300"
+                        : "border-white/10 bg-white/5 text-slate-300"
+                    }`}
+                >
+                    <Icon size={14} />
+                    {label}
+                </div>
+            </div>
+        );
+    }
 
     if (localMessage.isDeleted) {
         return (
