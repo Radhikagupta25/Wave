@@ -14,7 +14,7 @@ import { markMessagesAsSeen } from "../../../api/messageApi";
 const ChatLayout = () => {
 
     const loggedInUserId = localStorage.getItem("userId");
-
+    const [unreadCounts, setUnreadCounts] = useState({});
     const [selectedChat, setSelectedChat] = useState(null);
     const [mobileChatOpen, setMobileChatOpen] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
@@ -28,6 +28,15 @@ const ChatLayout = () => {
         try {
             const data = await getConversations();
             setConversations(data);
+            setUnreadCounts(prev => {
+                const next = { ...prev };
+                data.forEach(conv => {
+                    if (!(conv._id in next)) {
+                        next[conv._id] = conv.unreadCount || 0;
+                    }
+                });
+                return next;
+            });
         } catch (error) {
             console.log(error);
         }
@@ -109,6 +118,7 @@ const ChatLayout = () => {
         const loadChat = async () => {
             await fetchMessages();
             await markMessagesAsSeen(selectedChat._id);
+            setUnreadCounts(prev => ({ ...prev, [selectedChat._id]: 0 }));
         };
 
         loadChat();
@@ -148,22 +158,34 @@ const ChatLayout = () => {
         };
 
     }, [selectedChat]);
-    // Real-time incoming messages
     useEffect(() => {
-        if (!selectedChat) return;
-
         const handleNewMessage = ({ conversationId, message }) => {
-            if (conversationId !== selectedChat._id) return;
+            setConversations(prev =>
+                prev.map(conv =>
+                    conv._id === conversationId
+                        ? { ...conv, lastMessage: message, lastMessageAt: message.createdAt }
+                        : conv
+                )
+            );
 
-            setMessages(prev => {
-                if (prev.some(m => m._id === message._id)) return prev;
-                return [...prev, message];
-            });
-            if (message.sender._id !== loggedInUserId) {
-                markMessagesAsSeen(conversationId).catch(err => console.log(err));
+            const isOpenChat = conversationId === selectedChat?._id;
+
+            if (isOpenChat) {
+                setMessages(prev => {
+                    if (prev.some(m => m._id === message._id)) return prev;
+                    return [...prev, message];
+                });
+
+                if (message.sender._id !== loggedInUserId) {
+                    markMessagesAsSeen(conversationId).catch(err => console.log(err));
+                }
+            } else if (message.sender._id !== loggedInUserId) {
+                setUnreadCounts(prev => ({
+                    ...prev,
+                    [conversationId]: (prev[conversationId] || 0) + 1,
+                }));
             }
         };
-
         socket.on("new-message", handleNewMessage);
 
         return () => {
@@ -201,9 +223,10 @@ const ChatLayout = () => {
         return {
             ...conv,
             online: otherUser ? onlineUserIds.has(otherUser._id) : false,
+            unreadCount: unreadCounts[conv._id] || 0,
         };
     });
-
+    
     const selectedChatWithPresence = selectedChat
         ? {
             ...selectedChat,

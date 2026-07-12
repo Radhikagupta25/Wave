@@ -1,6 +1,6 @@
 let io;
 
-const onlineUsers = new Map(); // userId -> socketId
+const onlineUsers = new Map();
 
 export const initializeSocket = (socketServer) => {
     io = socketServer;
@@ -10,6 +10,8 @@ export const initializeSocket = (socketServer) => {
         socket.on("setup", (userId) => {
             socket.userId = userId;
             onlineUsers.set(userId, socket.id);
+            socket.join(userId);
+
             socket.broadcast.emit("user-online", { userId });
             socket.emit("online-users", { userIds: Array.from(onlineUsers.keys()) });
         });
@@ -32,6 +34,7 @@ export const initializeSocket = (socketServer) => {
 
         socket.on("disconnect", () => {
             if (!socket.userId) return;
+
             if (onlineUsers.get(socket.userId) === socket.id) {
                 onlineUsers.delete(socket.userId);
                 io.emit("user-offline", { userId: socket.userId });

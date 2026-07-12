@@ -69,9 +69,11 @@ const sendMessage = asyncHandler(async (req, res) => {
         });
     const io = getIO();
 
-    io.to(conversationId).emit("new-message", {
-        conversationId,
-        message: createdMessage,
+    conversation.participants.forEach((participantId) => {
+        io.to(participantId.toString()).emit("new-message", {
+            conversationId,
+            message: createdMessage,
+        });
     });
 
     return res.status(201).json(

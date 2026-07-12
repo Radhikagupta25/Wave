@@ -63,6 +63,9 @@ const ChatCard = ({
         }
 
     };
+
+    const hasUnread = chat.unreadCount > 0;
+
     return (
         <motion.div
             onClick={onClick}
@@ -87,7 +90,7 @@ const ChatCard = ({
                     )}
                 </div>
 
-                {otherUser?.online && (
+                {chat.online && (
                     <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-[#0B1523] bg-green-400" />
                 )}
             </div>
@@ -95,7 +98,7 @@ const ChatCard = ({
 
                 <div className="flex items-center justify-between">
 
-                    <h3 className="truncate font-semibold text-white">
+                    <h3 className={`truncate ${hasUnread ? "font-bold text-white" : "font-semibold text-white"}`}>
                         {otherUser?.username.charAt(0).toUpperCase() + otherUser?.username.slice(1) || "Unknown User"}
                     </h3>
 
@@ -110,9 +113,9 @@ const ChatCard = ({
 
                 </div>
 
-                <div className="mt-1">
+                <div className="mt-1 flex items-center justify-between gap-2">
 
-                    <div className="truncate text-sm text-slate-400">
+                    <div className={`truncate text-sm ${hasUnread ? "text-slate-200" : "text-slate-400"}`}>
 
                         {chat.lastMessage?.content ? (
 
@@ -129,6 +132,13 @@ const ChatCard = ({
                         )}
 
                     </div>
+
+                    {hasUnread && (
+                        <span className="flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-cyan-500 px-1.5 text-xs font-semibold text-white shadow-[0_0_10px_rgba(34,211,238,.5)]">
+                            {chat.unreadCount > 9 ? "9+" : chat.unreadCount}
+                        </span>
+                    )}
+
                 </div>
 
             </div>
