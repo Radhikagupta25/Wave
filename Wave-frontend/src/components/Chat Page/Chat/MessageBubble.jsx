@@ -161,7 +161,7 @@ const MessageBubble = ({ message, isGroup = false }) => {
                                 </div>
                             </div>
                         ) : (
-                            localMessage.content && <p className="leading-7 whitespace-pre-wrap break-words">{localMessage.content}</p>
+                            localMessage.content && <p className="leading-7 whitespace-pre-wrap wrap-break-words">{localMessage.content}</p>
                         )}
 
                         {localMessage.attachments?.length > 0 && (

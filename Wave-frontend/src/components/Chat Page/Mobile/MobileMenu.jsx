@@ -10,19 +10,42 @@ import {
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { logoutUser } from "../../../api/authApi";
+import { socket } from "../../../services/socket";
 
 const MobileMenu = ({ open, onClose }) => {
 
     const navigate = useNavigate();
 
+    const handleLogout = async () => {
+        onClose();
+        try {
+            await logoutUser();
+        } catch (error) {
+            console.log(error);
+        } finally {
+            localStorage.removeItem("userId");
+            socket.disconnect();
+            navigate("/login");
+        }
+    };
+
     const menuItems = [
         {
             icon: User,
             label: "My Profile",
+            onClick: () => {
+                onClose();
+                navigate("/profile");
+            },
         },
         {
             icon: UserPen,
             label: "Edit Profile",
+            onClick: () => {
+                onClose();
+                navigate("/edit-profile");
+            },
         },
         {
             icon: Users,
@@ -36,6 +59,7 @@ const MobileMenu = ({ open, onClose }) => {
             icon: LogOut,
             label: "Logout",
             danger: true,
+            onClick: handleLogout,
         },
     ];
 

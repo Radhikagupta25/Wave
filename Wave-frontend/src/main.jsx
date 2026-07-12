@@ -14,6 +14,8 @@ import ChatPage from "./pages/ChatPage";
 import CreateNewChatPage from "./pages/CreateNewChatPage";
 import CreateGroupPage from "./pages/CreateGroupPage";
 import Profile from "./pages/Profile";
+import ProfilePage from "./pages/ProfilePage";
+import EditProfilePage from "./pages/EditProfilePage";
 
 const router = createBrowserRouter([
     {
@@ -53,8 +55,12 @@ const router = createBrowserRouter([
         element: <CreateGroupPage />,
     },
     {
-        path: "/profile/:userId",
-        element: <Profile />,
+        path: "/profile",
+        element: <ProfilePage />,
+    },
+    {
+        path: "/edit-profile",
+        element: <EditProfilePage />,
     },
 ]);
 

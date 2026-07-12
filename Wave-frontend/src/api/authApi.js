@@ -65,3 +65,15 @@ export const getUserProfile = async (userId) => {
     const { data } = await api.get(`/profile/${userId}`);
     return data.data;
 };
+
+export const updateUserDetails = async (payload) => {
+    const { data } = await api.patch("/updateUserDetails", payload);
+    return data.data;
+};
+
+export const updateUserAvatarImage = async (formData) => {
+    const { data } = await api.patch("/updateImageFiles", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
+    return data.data;
+};
