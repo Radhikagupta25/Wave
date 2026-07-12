@@ -18,9 +18,9 @@ export const initZegoCall = (userId, username) => {
 
     const appID = Number(import.meta.env.VITE_ZEGO_APP_ID);
     const appSign = import.meta.env.VITE_ZEGO_SERVER_SECRET;
-
-    const appID = Number(import.meta.env.VITE_ZEGO_APP_ID);
-    const appSign = import.meta.env.VITE_ZEGO_SERVER_SECRET;
+    console.log(import.meta.env);
+    console.log(import.meta.env.VITE_ZEGO_APP_ID);
+    console.log(import.meta.env.VITE_ZEGO_SERVER_SECRET);
 
     if (!appID || !appSign) {
         console.error("Missing ZEGO credentials");
