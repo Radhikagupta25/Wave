@@ -5,6 +5,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { getIO } from "../socket/socket.js";
+import { User } from "../models/user.auth.models.js";
 
 const sendMessage = asyncHandler(async (req, res) => {
 
@@ -69,11 +70,27 @@ const sendMessage = asyncHandler(async (req, res) => {
         });
     const io = getIO();
 
+    // Find out who among the participants has blocked the sender
+    const participantsWithBlockLists = await User.find({
+        _id: { $in: conversation.participants },
+    }).select("_id blockedUsers");
+
+    const blockedByMap = new Map(
+        participantsWithBlockLists.map((u) => [
+            u._id.toString(),
+            u.blockedUsers?.some((id) => id.toString() === req.user._id.toString()) || false,
+        ])
+    );
+
     conversation.participants.forEach((participantId) => {
-        io.to(participantId.toString()).emit("new-message", {
-            conversationId,
-            message: createdMessage,
-        });
+        const pid = participantId.toString();
+        const hasBlockedSender = blockedByMap.get(pid);
+        if (pid === req.user._id.toString() || !hasBlockedSender) {
+            io.to(pid).emit("new-message", {
+                conversationId,
+                message: createdMessage,
+            });
+        }
     });
 
     return res.status(201).json(
@@ -112,6 +129,8 @@ const getMessages = asyncHandler(async (req, res) => {
         );
     }
 
+    const me = await User.findById(req.user._id).select("blockedUsers");
+
     const messages = await Message.find({
         conversation: conversationId,
     })
@@ -122,10 +141,17 @@ const getMessages = asyncHandler(async (req, res) => {
             createdAt: 1,
         });
 
+    // Hide messages from anyone I've blocked
+    const visibleMessages = messages.filter(
+        (msg) => !me.blockedUsers?.some(
+            (blockedId) => blockedId.toString() === msg.sender._id.toString()
+        )
+    );
+
     return res.status(200).json(
         new ApiResponse(
             200,
-            messages,
+            visibleMessages,
             "Messages fetched successfully"
         )
     );

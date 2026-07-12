@@ -132,7 +132,8 @@ const ChatHeader = ({
                     <ChatMenu
                         open={menuOpen}
                         onClose={() => setMenuOpen(false)}
-                        isGroup={chat.isGroup}
+                        isGroup={chat?.isGroup}
+                        chat={chat}
                     />
 
                 </div>

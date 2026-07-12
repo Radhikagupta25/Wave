@@ -69,6 +69,12 @@ const userSchema = new mongoose.Schema({
     passwordResetExpiry: {
         type: Date,
     },
+    blockedUsers: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+        },
+    ],
 }, {
     timestamps: true
 })

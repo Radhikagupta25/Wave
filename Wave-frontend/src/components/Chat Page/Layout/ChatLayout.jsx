@@ -197,9 +197,17 @@ const ChatLayout = () => {
     useEffect(() => {
         if (!selectedChat) return;
 
+        const me = selectedChat.participants?.find(
+            (p) => p._id === loggedInUserId
+        );
+        const blockedUserIds = new Set(
+            (me?.blockedUsers || []).map((id) => id.toString())
+        );
+
         const handleTyping = ({ conversationId, userId }) => {
             if (conversationId !== selectedChat._id) return;
             if (userId === loggedInUserId) return;
+            if (blockedUserIds.has(userId.toString())) return; // ignore blocked sender
             setTypingUserId(userId);
         };
 
@@ -226,7 +234,7 @@ const ChatLayout = () => {
             unreadCount: unreadCounts[conv._id] || 0,
         };
     });
-    
+
     const selectedChatWithPresence = selectedChat
         ? {
             ...selectedChat,

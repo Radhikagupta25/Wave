@@ -8,6 +8,7 @@ import crypto from "crypto";
 import { Resend } from 'resend';
 import { sendVerificationEmail, sendResetPasswordEmail } from "../services/email.services.js";
 import { verifyGoogleToken } from "../services/google.services.js";
+import mongoose from "mongoose";
 
 const generateAccessAndRefreshToken = async (userId) => {
     try {
@@ -654,6 +655,60 @@ const searchUsers = asyncHandler(async (req, res) => {
 
 });
 
+const blockUser = asyncHandler(async (req, res) => {
+
+    const { userId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        throw new ApiError(400, "Invalid user id");
+    }
+
+    if (userId === req.user._id.toString()) {
+        throw new ApiError(400, "You cannot block yourself");
+    }
+
+    await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $addToSet: {
+                blockedUsers: userId,
+            },
+        }
+    );
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            {},
+            "User blocked successfully"
+        )
+    );
+
+});
+
+const unblockUser = asyncHandler(async (req, res) => {
+
+    const { userId } = req.params;
+
+    await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $pull: {
+                blockedUsers: userId,
+            },
+        }
+    );
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            {},
+            "User unblocked successfully"
+        )
+    );
+
+});
+
 export {
     registerUser,
     loginUser,
@@ -670,5 +725,7 @@ export {
     resetPassword,
     resendVerificationOtp,
     googleSignup,
-    searchUsers
+    searchUsers,
+    blockUser,
+    unblockUser
 }

@@ -54,3 +54,9 @@ export const resendVerificationOtp = (data) => {
 export const searchUsers = (query) => {
     return api.get(`/search-users?query=${query}`);
 };
+
+export const blockUser = (userId) =>
+    api.patch(`/block/${userId}`);
+
+export const unblockUser = (userId) =>
+    api.patch(`/unblock/${userId}`);
