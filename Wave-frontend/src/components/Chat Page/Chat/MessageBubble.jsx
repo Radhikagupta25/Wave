@@ -1,55 +1,53 @@
 import { Check, CheckCheck } from "lucide-react";
 import { motion } from "framer-motion";
 
-const MessageBubble = ({ message }) => {
+const MessageBubble = ({ message, isGroup = false }) => {
 
     const loggedInUserId = localStorage.getItem("userId");
-    const isMe = message.sender._id === loggedInUserId;
+    const isMe = message.sender?._id === loggedInUserId;
+
+    const senderName = isMe
+        ? "You"
+        : (message.sender?.username
+            ? message.sender.username.charAt(0).toUpperCase() + message.sender.username.slice(1)
+            : "Unknown");
 
     return (
 
         <motion.div
-
             initial={{
                 opacity: 0,
                 y: 20,
             }}
-
             animate={{
                 opacity: 1,
                 y: 0,
             }}
-
             transition={{
-                duration: .25,
+                duration: 0.25,
             }}
-
-            className={`flex ${isMe
-                ? "justify-end"
-                : "justify-start"
-                }`}
-
+            className={`flex ${isMe ? "justify-end" : "justify-start"}`}
         >
 
             <div
-
-                className={`max-w-[70%] rounded-[26px] px-5 py-4 shadow-lg
-
-                ${isMe
-
-                        ? "bg-linear-to-r from-cyan-500 to-blue-600 text-white"
-
-                        : "border border-white/10 bg-white/5 text-slate-100 backdrop-blur-xl"
-
+                className={`max-w-[70%] rounded-[26px] px-5 py-4 shadow-lg ${isMe
+                    ? "bg-linear-to-r from-cyan-500 to-blue-600 text-white"
+                    : "border border-white/10 bg-white/5 text-slate-100 backdrop-blur-xl"
                     }`}
-
             >
 
-                <p className="leading-7">
+                {isGroup && !isMe && (
+                    <p className="mb-1 text-xs font-semibold text-cyan-300">
+                        {senderName}
+                    </p>
+                )}
 
-                    {message.content}
+                {message.content && (
+                    <p className="leading-7">
+                        {message.content}
+                    </p>
+                )}
 
-                </p>
                 {message.attachments?.length > 0 && (
 
                     <div className="mt-3 space-y-3">
@@ -66,6 +64,7 @@ const MessageBubble = ({ message }) => {
                                         className="max-h-80 w-full rounded-2xl object-cover"
                                     />
                                 );
+
                             }
 
                             if (attachment.fileType === "video") {
@@ -82,6 +81,7 @@ const MessageBubble = ({ message }) => {
                                         />
                                     </video>
                                 );
+
                             }
 
                             if (attachment.fileType === "audio") {
@@ -98,6 +98,7 @@ const MessageBubble = ({ message }) => {
                                         />
                                     </audio>
                                 );
+
                             }
 
                             return (
@@ -109,13 +110,10 @@ const MessageBubble = ({ message }) => {
                                     rel="noreferrer"
                                     className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3 hover:bg-white/10"
                                 >
-
                                     📄
 
                                     <span className="truncate">
-
                                         {attachment.fileName}
-
                                     </span>
 
                                 </a>
@@ -129,27 +127,23 @@ const MessageBubble = ({ message }) => {
                 )}
 
                 <div
-
-                    className={`mt-2 flex items-center gap-1 text-xs
-
-                    ${isMe
-                            ? "justify-end text-cyan-100"
-                            : "justify-end text-slate-400"
+                    className={`mt-2 flex items-center gap-1 text-xs ${isMe
+                        ? "justify-end text-cyan-100"
+                        : "justify-end text-slate-400"
                         }`}
-
                 >
 
                     {new Date(message.createdAt).toLocaleTimeString([], {
                         hour: "2-digit",
-                        minute: "2-digit"
+                        minute: "2-digit",
                     })}
-                    {isMe && (
-                        message.seenBy?.length > 0 ? (
+
+                    {isMe &&
+                        (message.seenBy?.length > 0 ? (
                             <CheckCheck size={14} />
                         ) : (
                             <Check size={14} />
-                        )
-                    )}
+                        ))}
 
                 </div>
 

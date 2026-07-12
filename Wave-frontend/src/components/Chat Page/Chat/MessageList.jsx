@@ -33,6 +33,7 @@ const MessageList = ({ messages, selectedChat, isTyping }) => {
                     <MessageBubble
                         key={message._id}
                         message={message}
+                        isGroup={selectedChat?.isGroup}
                     />
                 ))}
 

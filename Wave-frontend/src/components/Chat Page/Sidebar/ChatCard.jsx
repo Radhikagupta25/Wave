@@ -5,6 +5,7 @@ import {
     FileText,
     Music,
     Paperclip,
+    Users,
 } from "lucide-react";
 
 const ChatCard = ({
@@ -17,6 +18,15 @@ const ChatCard = ({
     const otherUser = chat.participants?.find(
         (user) => user._id !== loggedInUserId
     );
+
+    const displayName = chat.isGroup
+        ? chat.groupName
+        : (otherUser?.username
+            ? otherUser.username.charAt(0).toUpperCase() + otherUser.username.slice(1)
+            : "Unknown User");
+
+    const displayAvatar = chat.isGroup ? chat.groupAvatar : otherUser?.avatar;
+
     const getAttachmentPreview = (attachment) => {
 
         switch (attachment.fileType) {
@@ -79,18 +89,20 @@ const ChatCard = ({
         >
             <div className="relative">
                 <div className="flex h-14 w-14 items-center justify-center rounded-full bg-linear-to-br from-cyan-400 to-blue-600 text-lg font-bold text-white">
-                    {otherUser?.avatar ? (
+                    {displayAvatar ? (
                         <img
-                            src={otherUser.avatar}
-                            alt={otherUser.username}
-                            className="h-full w-full object-cover"
+                            src={displayAvatar}
+                            alt={displayName}
+                            className="h-full w-full rounded-full object-cover"
                         />
+                    ) : chat.isGroup ? (
+                        <Users size={22} />
                     ) : (
-                        otherUser?.username?.charAt(0).toUpperCase() || "?"
+                        displayName?.charAt(0).toUpperCase() || "?"
                     )}
                 </div>
 
-                {chat.online && (
+                {!chat.isGroup && chat.online && (
                     <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-[#0B1523] bg-green-400" />
                 )}
             </div>
@@ -99,7 +111,7 @@ const ChatCard = ({
                 <div className="flex items-center justify-between">
 
                     <h3 className={`truncate ${hasUnread ? "font-bold text-white" : "font-semibold text-white"}`}>
-                        {otherUser?.username.charAt(0).toUpperCase() + otherUser?.username.slice(1) || "Unknown User"}
+                        {displayName}
                     </h3>
 
                     <span className="text-xs text-slate-400">
@@ -119,7 +131,9 @@ const ChatCard = ({
 
                         {chat.lastMessage?.content ? (
 
-                            chat.lastMessage.content
+                            chat.isGroup && chat.lastMessage?.sender?.username
+                                ? `${chat.lastMessage.sender.username}: ${chat.lastMessage.content}`
+                                : chat.lastMessage.content
 
                         ) : chat.lastMessage?.attachments?.length > 0 ? (
 

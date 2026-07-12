@@ -18,6 +18,10 @@ const conversationSchema = new mongoose.Schema({
     groupAvatar: {
         type: String
     },
+    groupDescription: {
+        type: String,
+        default: "",
+    },
     admins: [
         {
             type: mongoose.Schema.Types.ObjectId,

@@ -3,6 +3,7 @@ import {
     createOrGetConversation,
     getConversationById,
     getMyConversations,
+    createGroupConversation
 } from "../controllers/conversation.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -15,5 +16,7 @@ router.post("/", createOrGetConversation);
 router.get("/", getMyConversations);
 
 router.get("/:conversationId", getConversationById);
+
+router.post("/group", createGroupConversation);
 
 export default router;

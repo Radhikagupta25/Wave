@@ -12,6 +12,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import ChatPage from "./pages/ChatPage";
 import CreateNewChatPage from "./pages/CreateNewChatPage";
+import CreateGroupPage from "./pages/CreateGroupPage";
 
 const router = createBrowserRouter([
     {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
     {
         path: "/new-chat",
         element: < CreateNewChatPage />,
+    },
+    {
+        path: "/new-group",
+        element: <CreateGroupPage />,
     },
 ]);
 

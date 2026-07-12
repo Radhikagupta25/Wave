@@ -124,9 +124,54 @@ const getConversationById = asyncHandler(async (req, res) => {
         )
     );
 });
+const createGroupConversation = asyncHandler(async (req, res) => {
+
+    const { groupName, groupDescription = "", participantIds = [], groupAvatar = "" } = req.body;
+
+    if (!groupName?.trim()) {
+        throw new ApiError(400, "Group name is required");
+    }
+
+    if (!Array.isArray(participantIds) || participantIds.length < 2) {
+        throw new ApiError(400, "A group needs at least 2 other participants");
+    }
+
+    const invalidId = participantIds.find(
+        id => !mongoose.Types.ObjectId.isValid(id)
+    );
+    if (invalidId) {
+        throw new ApiError(400, "Invalid participant id");
+    }
+
+    const uniqueParticipants = Array.from(
+        new Set([...participantIds, req.user._id.toString()])
+    );
+
+    const conversation = await Conversation.create({
+        participants: uniqueParticipants,
+        isGroup: true,
+        groupName: groupName.trim(),
+        groupDescription: groupDescription.trim(),
+        groupAvatar,
+        admins: [req.user._id],
+    });
+
+    const populatedConversation = await Conversation.findById(conversation._id)
+        .populate("participants", "fullname username avatar");
+
+    return res.status(201).json(
+        new ApiResponse(
+            201,
+            populatedConversation,
+            "Group created successfully"
+        )
+    );
+
+});
 
 export {
     createOrGetConversation,
     getMyConversations,
     getConversationById,
+    createGroupConversation
 };

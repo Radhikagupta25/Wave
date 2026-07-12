@@ -1,15 +1,18 @@
 import {
     User,
     Ban,
+    Info,
+    Users,
+    LogOut,
 } from "lucide-react";
 
 import { AnimatePresence, motion } from "framer-motion";
 
-const ChatMenu = ({ open, onClose }) => {
+const ChatMenu = ({ open, onClose, isGroup = false }) => {
 
     if (!open) return null;
 
-    const menuItems = [
+    const dmMenuItems = [
         {
             icon: User,
             label: "View Profile",
@@ -23,6 +26,27 @@ const ChatMenu = ({ open, onClose }) => {
             danger: true,
         },
     ];
+
+    const groupMenuItems = [
+        {
+            icon: Info,
+            label: "Group Info",
+        },
+        {
+            icon: Users,
+            label: "View Members",
+        },
+        {
+            divider: true,
+        },
+        {
+            icon: LogOut,
+            label: "Leave Group",
+            danger: true,
+        },
+    ];
+
+    const menuItems = isGroup ? groupMenuItems : dmMenuItems;
 
     return (
         <AnimatePresence>

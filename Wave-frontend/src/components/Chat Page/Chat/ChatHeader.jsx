@@ -4,6 +4,7 @@ import {
     Video,
     Search,
     MoreVertical,
+    Users,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -21,6 +22,19 @@ const ChatHeader = ({
     const otherUser = chat?.participants?.find(
         user => user._id !== loggedInUserId
     );
+
+    const displayName = chat.isGroup
+        ? chat.groupName
+        : (otherUser?.username
+            ? otherUser.username.charAt(0).toUpperCase() + otherUser.username.slice(1)
+            : "Unknown User");
+
+    const displayAvatar = chat.isGroup ? chat.groupAvatar : otherUser?.avatar;
+
+    const statusText = chat.isGroup
+        ? `${chat.participants?.length || 0} members`
+        : (isTyping ? "typing..." : (chat.online ? "Online" : "Offline"));
+
     return (
         <div
             className={`relative z-50 flex items-center justify-between border-b border-white/10 bg-[#08131F]/90 backdrop-blur-xl ${mobile ? "h-16 px-4" : "h-20 px-8"
@@ -43,18 +57,20 @@ const ChatHeader = ({
                         className={`flex items-center justify-center rounded-full bg-linear-to-br from-cyan-400 to-blue-600 text-white font-semibold ${mobile ? "h-10 w-10" : "h-14 w-14"
                             }`}
                     >
-                        {otherUser?.avatar ? (
+                        {displayAvatar ? (
                             <img
-                                src={otherUser.avatar}
-                                alt={otherUser.username}
-                                className="h-full w-full object-cover"
+                                src={displayAvatar}
+                                alt={displayName}
+                                className="h-full w-full rounded-full object-cover"
                             />
+                        ) : chat.isGroup ? (
+                            <Users size={mobile ? 18 : 22} />
                         ) : (
-                            otherUser?.username?.charAt(0).toUpperCase() || "?"
+                            displayName?.charAt(0).toUpperCase() || "?"
                         )}
                     </div>
 
-                    {chat.online && (
+                    {!chat.isGroup && chat.online && (
                         <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-[#08131F] bg-green-400" />
                     )}
 
@@ -63,18 +79,19 @@ const ChatHeader = ({
                 <div className="min-w-0">
 
                     <h2 className="truncate font-semibold text-white">
-                        {otherUser?.username.charAt(0).toUpperCase() + otherUser?.username.slice(1) || "Unknown User"}
+                        {displayName}
                     </h2>
 
-                    {isTyping ? (
-                        <p className="text-xs text-cyan-300">
-                            typing...
-                        </p>
-                    ) : (
-                        <p className={`text-xs ${chat.online ? "text-green-400" : "text-slate-400"}`}>
-                            {chat.online ? "Online" : "Offline"}
-                        </p>
-                    )}
+                    <p className={`truncate text-xs ${chat.isGroup
+                        ? "text-slate-400"
+                        : isTyping
+                            ? "text-cyan-300"
+                            : chat.online
+                                ? "text-green-400"
+                                : "text-slate-400"
+                        }`}>
+                        {statusText}
+                    </p>
 
                 </div>
 
@@ -115,6 +132,7 @@ const ChatHeader = ({
                     <ChatMenu
                         open={menuOpen}
                         onClose={() => setMenuOpen(false)}
+                        isGroup={chat.isGroup}
                     />
 
                 </div>

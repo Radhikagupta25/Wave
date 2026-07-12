@@ -10,3 +10,7 @@ export const createConversation = (participantId) => {
         participantId,
     });
 };
+
+export const createGroupConversation = (groupData) => {
+    return api.post("/conversations/group", groupData);
+};
