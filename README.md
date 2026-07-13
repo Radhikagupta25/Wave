@@ -145,9 +145,6 @@ H -->|Ring / Accept / Reject| A
   </tr>
   <tr>
     <td align="center"><b>Call</b><br><img src="./Screenshots/callPage.png" width="200"/></td>
-    <td></td>
-    <td></td>
-    <td></td>
   </tr>
 </table>
 
