@@ -122,6 +122,35 @@ A -->|Call Invitation| H
 H -->|Ring / Accept / Reject| A
 ```
 
+##  App Screenshots
+
+<table>
+  <tr>
+    <td align="center"><b>Home</b><br><img src="./Screenshots/HomePage.png" width="200"/></td>
+    <td align="center"><b>Login</b><br><img src="./Screenshots/LoginPage.png" width="200"/></td>
+    <td align="center"><b>Signup</b><br><img src="./Screenshots/SignupPAge.png" width="200"/></td>
+    <td align="center"><b>Email Verification</b><br><img src="./Screenshots/EmailVerificationForPassword.png" width="200"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Menu</b><br><img src="./Screenshots/MenuPage.png" width="200"/></td>
+    <td align="center"><b>Profile</b><br><img src="./Screenshots/ProfilePage.png" width="200"/></td>
+    <td align="center"><b>Edit Profile</b><br><img src="./Screenshots/EditProfile.png" width="200"/></td>
+    <td align="center"><b>Chat</b><br><img src="./Screenshots/ChatPage.png" width="200"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>New Chat</b><br><img src="./Screenshots/NewChatPage.png" width="200"/></td>
+    <td align="center"><b>Message</b><br><img src="./Screenshots/MessagePage.png" width="200"/></td>
+    <td align="center"><b>Create Group</b><br><img src="./Screenshots/CreateGroup.png" width="200"/></td>
+    <td align="center"><b>Group Info</b><br><img src="./Screenshots/GroupInfoPanel.png" width="200"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Call</b><br><img src="./Screenshots/callPage.png" width="200"/></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
+
 ---
 
 ## Real-Time Architecture Highlights
